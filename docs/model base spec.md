@@ -9,13 +9,16 @@ The model base must provide the following common features for the gci model obje
 - log event
 
 Logging requires the model base to
-- maintain a list of parametrized log messages for the different events
+- maintain 
+  . a list of parametrized log messages for the different events
 - receive logging request with the arguments
   . level
   . event
   . the values for replacing the message parameters
-- log the message to the Air Manager log file 
+- log the message to the Air Manager log file
+  . if the object 'log' state is not false
   . using the API helper function 'log'
+  . prefix the message with "GCI: "
 
 ## Interface Requirements
 The model base must 
