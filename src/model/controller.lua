@@ -34,7 +34,7 @@
     )
 
     if gc_id then
-      self:log_event("INFO", "added", controller.name)
+      controller:log_event("INFO", "added", controller.name)
       controller.id = gc_id
       return controller
     else
