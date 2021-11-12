@@ -27,15 +27,15 @@ The controller model must provide the following common features
     - input (input value)
   - select the control, based on type and index
   - call the handle method of the control
-- create new controller using the Air Manager API function 'game_controller_add' with
+- create 'new' controller using the Air Manager API function 'game_controller_add' with
   - the game controller 'name'
-  - the dispatcher method as callback
+  - a callback function that calls the dispatcher method 
   - maintain the game controller id returned
   - return the controller
 - use the log_event method of the model base when
-  - game controller not found
-  - game controller added
-  - dispatcher called from Air Manager
+  - game controller 'not found'
+  - game controller 'added'
+  - dispatcher 'called' from Air Manager
   - input dispatched to control handle method
 
 ## Usage Requirements
@@ -43,4 +43,6 @@ The controller model must provide the following common features
 a gci contoller object based on this controller model must provide 
 - the game controller 'name'
 - the set of configured 'controls'
+and may provide
+- a log attribute
 
