@@ -1,10 +1,20 @@
 # Model Base specification
+
 This specifies the requirements for the model base.
 
 ## Modeling Requirements
+
 All gci model object must inherit from the model base.
 
+## Interface Requirements
+
+The model base must 
+- be implemented as the object 'gci_base'
+- provide a 'new' constructor
+- provide a 'log_event' method.
+
 ## Functional Requirements
+
 The model base must provide the following common features for the gci model objects
 - log event
 
@@ -20,9 +30,7 @@ Logging requires the model base to
   - using the API helper function 'log'
   - prefix the message with "GCI: "
 
-## Interface Requirements
-The model base must 
-- be implemented as the object 'gci_base'
-- provide a 'new' constructor
-- provide a 'log_event' method.
+## Usage Requirements
 
+A gci model object to be based on this base model must provide
+- its own list of parametrized log messages for the model events
