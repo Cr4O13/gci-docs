@@ -28,17 +28,18 @@ test_constructor = function()
 end
 
 test_logging = function()
+  spy_message = {}
   test_object.log = true
-  local log_entry = test_object:log_event(level, event)
-  lunit.assertNotNil(log_entry)
-  lunit.assertEquals(log_entry.level, level)
-  lunit.assertEquals(log_entry.message, log_message)
+  test_object:log_event(level, event)
+  lunit.assertEquals(spy_message.level, level)
+  lunit.assertEquals(spy_message.text, log_message)
 end
 
 test_logging_off = function()
+  spy_message = {}
   test_object.log = false
-  local log_entry = test_object:log_event(level, event)
-  lunit.assertNil(log_entry)
+  test_object:log_event(level, event)
+  lunit.assertEquals(spy_message, {} )
 end
 
 -- Test Runner

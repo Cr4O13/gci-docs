@@ -5,7 +5,7 @@
   
   function gci_base:log_event (level, event, ... )
     if self.log then
-      return log(level, "GCI: " .. string.format(self.events[event], ... ) )
+      log(level, "GCI: " .. string.format(self.events[event], ... ) )
     end
   end
 
