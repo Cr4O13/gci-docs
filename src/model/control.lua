@@ -8,12 +8,12 @@
       added        = "%s '%s' added",
       handle       = "%s control '%s' handles input (%s)",
       no_responder = "%s control '%s' has no response configured for input '%s'",
-      no_handler   = "%s control '%s' has no custom handler implemented"
+      no_handler   = "%s control '%s' has no handler implemented"
     }
   }
 
-  function gci_control:handler(_, _)
-    self:log_event("ERROR", "no_handler", self.class, self.id.label )
+  function gci_control:handler( responder, input )
+    responder:respond(input)
   end
 
   function gci_control:handle(input)
