@@ -62,6 +62,7 @@ end
 spy_message = {}
 
 function log(type, text)
+  print("logging: " .. type .. ", " .. text)
   spy_message.level = type
   spy_message.text = text
 end
