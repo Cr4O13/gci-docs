@@ -6,7 +6,7 @@ local mock_am = require "test/mock/airmanager"
 local lunit = require "test/lib/luaunit"
 
 log = mock_am.log
--- game_controller_add   = mock_am.game_controller_add
+
 si_variable_write     = mock_am.si_variable_write
 fs2020_variable_write = mock_am.fs2020_variable_write
 fs2020_event          = mock_am.fs2020_event
