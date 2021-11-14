@@ -15,7 +15,7 @@ fsx_event             = mock_am.sx_event
 xpl_dataref_write     = mock_am.pl_dataref_write
 xpl_command           = mock_am.pl_command
 
-local api           = model.api
+local action_map      = model.action_map
 local gci_responder = model.gci_responder
 
 -- Test Data
@@ -33,7 +33,7 @@ local force
 local input  = true
 
 local responder = {}
-responder.respond  = api[sim][action]
+responder.respond  = action_map[sim][action]
 responder.var_id   = event
 responder.unit_id  = unit
 responder.output   = function(input) return input end
