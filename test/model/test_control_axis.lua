@@ -43,7 +43,7 @@ responders["on_change"] = gci_responder:new(axis_responder)
   
 local axis = {
   log = true,
-  class = "axis",
+  subtype = "axis",
   id = { index = 0, label = "A0" },
   
   map = function (input) return "on_change" end,

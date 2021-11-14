@@ -18,7 +18,7 @@ responders[input] = nil
 local control = { 
   map = function (input) return input end,
   responders = responders,
-  class = "Test",
+  subtype = "Test",
   id = { label = "T0" }  
 }
 
@@ -34,7 +34,7 @@ test_create = function()
   lunit.assertNotNil(test_control)
   lunit.assertNotNil(test_control.map)
   lunit.assertNotNil(test_control.responders)
-  lunit.assertNotNil(test_control.class)
+  lunit.assertNotNil(test_control.subtype)
   lunit.assertNotNil(test_control.id.label)
 end
 
