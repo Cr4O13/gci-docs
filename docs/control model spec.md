@@ -37,8 +37,10 @@ The control model must provide the following basic features for control objects
 A control to be based on this model must provide to the 'new' constructor
 - a map function to map inputs to triggers
 - a list of responders for the different input triggers
-- a class attribute
-- a id.label attribute
-- a handler specific to the control
+- a subtype field
+- a label field
+- a action field
 and may provide
+- a log attribute
 - additional events to log in the handler
+- a handler specific to the control
