@@ -17,12 +17,12 @@
   end
 
   function gci_control:handle(input)
-    self:log_event("INFO", "handle", self.class, self.id.label, input)
+    self:log_event("INFO", "handle", self.subtype, self.id.label, input)
     local responder = self.responders[ self.map(input) ]
     if responder then
       self:handler( responder, input )
     else
-      self:log_event("INFO", "no_responder", self.class, self.id.label, input )
+      self:log_event("INFO", "no_responder", self.subtype, self.id.label, input )
     end
   end
 

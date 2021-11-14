@@ -41,7 +41,7 @@ responders["on_true"]  = gci_responder:new(button_responder)
   
 local button = {
   log = true,
-  class = "button",
+  subtype = "button",
   id = { index = 0, label = "B0" },
   
   map = function (input) if input then return "on_true" else return "on_false" end end,
