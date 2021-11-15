@@ -51,39 +51,25 @@ The controller name must be identical to the name Air Manager returns in the API
 ~~~
 controls :: controls-field ( , controls )
 controls-field :: axes-field | buttons-field
+
+axes-field :: "axes" : [ control-list ]
+buttons-field :: "buttons" : [ control-list ]
+
+control-list :: control-spec ( , control-list )
+control-spec :: { required-control-fields ( optional-control-fields ) }
+
+required-control-fields :: required-control-field ( , required-control-fields )
+required-control-field :: id-field | respond-field
+
+optional-control-fields :: optional-control-field ( , optional-control-fields )
+optional-control-field :: subtype-field | action-field | attributes
 ~~~
 
-#### Axes
-
-~~~
-axes-field :: "axes" : [ axis-list ]
-axis-list :: axis-spec ( , axis-list )
-
-axis-spec :: { axis-required-fields ( axis-optional-fields ) }
-
-axis-required-fields :: axis-required-field ( , axis-required-fields )
-axis-required-field :: id-field | respond-field
-
-axis-optional-fields :: axis-optional-field ( , axis-optional-fields )
-axis-optional-field :: subtype-field | action-field | attributes
-~~~
-
-#### Buttons
-
-~~~
-buttons-field :: "buttons" : [ button-list ]
-button-list :: button-spec ( , button-list )
-
-button-spec :: { button-required-fields ( button-optional-fields ) }
-
-button-required-fields :: button-required-field ( , button-required-fields )
-button-required-field :: id-field | respond-field
-
-button-optional-fields :: axis-optional-field ( , axis-optional-fields )
-button-optional-field :: subtype-field | action-field | attributes
-~~~
+Ther are two basic types of control: `axis` and `button`. The two types have to be placed in two separate lists objects in the configuration file: `axes` and `buttons`.
 
 #### Common Fields
+
+The two basic types of control share the same set of specification fields. 
 
 ~~~
 id-field :: "id" : { "index" : index-value ( , "label" : label-value ) }
@@ -91,7 +77,7 @@ index-value :: lua-number
 label-value :: lua-string
 
 subtype-field :: "subtype" : { "name" : subtype-keyword ( , "parameters" : { parameter-list } ) }
-subtype-keyword :: axis-subtype-keyword | button-subtype-keyword
+subtype-keyword :: subtype-keyword
 
 parameter-list :: parameter-value ( , parameter-list )
 parameter-value :: lua-value
@@ -104,31 +90,63 @@ responder-list :: responder-spec ( , responders-list )
 
 responder-spec :: subtype-trigger-keyword : { responder-field-list } 
 
-subtype-trigger-keyword :: 
-  axis-trigger-keyword | button-trigger-keyword | 
-  switched-trigger-keyword | timed_trigger-keyword | modal_trigger-keyword
+subtype-trigger-keyword :: trigger-keyword
 ~~~
 
-#### Axis Fields
+The `subtype` and `trigger` keywords are specific to the subtype specified.
+
+#### Keywords for Axis Subtype
+
+`axis` is the subtype for true axes controls. The specified action is executed every time the input changes.
 
 ~~~
-axis-subtype-keyword :: "axis" | "switched"
-
-axis-trigger-keyword :: "on_change"
-switched-trigger-keyword :: "on_plus" | "on_zero" | "on_minus"
+subtype-keyword :: "axis"
+trigger-keyword :: "on_change"
 ~~~
 
-#### Button Fields
+#### Keywords for Switched Subtype
+
+The 'switched' subtype is used for axis inputs that have 3 states. The states are represnted by the input values `-1.0`, `0.0` and `+1.0`. This is sometimes the case for some POV multiway switches. Two actions can be specified, one for each state. The corrsponding action is executed when the state changes.
 
 ~~~
-button-subtype-keyword :: "button" | "timed" | "modal"
+subtype-keyword :: "switched
+trigger-keyword :: "on_plus" | "on_zero" | "on_minus"
+~~~
 
-button_trigger-keyword :: "on_true" | "on_false"
-timed_trigger-keyword  :: "on_time" | "on_stop"
-modal_trigger-keyword  :: "on_mode1" | "on_mode2"
+#### Keywords for Button Subtype
+
+`button` is the subtype for true buttons and switches (latching and non-latching). Two actions can be specified, one for a pressed button and one for a released action. The action is executed when the state changes.
+
+~~~
+subtype-keyword :: "button"
+trigger-keyword :: "on_true" | "on_false"
+~~~
+
+~~~
+
+#### Keywords for Timed Subtype
+
+A `timed` button is a non-latching push button that repeats an action as long as the button is held pressed. The intial delay time, the repeating period and optionally a limit on the number of actions can be parameterized. Two actions can be specified, one for the repeating action and one for the stop action.
+
+~~~
+subtype-keyword :: "timed"
+trigger-keyword :: "on_time" | "on_stop"
+~~~
+
+~~~
+
+#### keywords for Modal Subtype
+
+A `modal` button is a non-latching push button that behaves differerently depending on how much time the button is held pressed, The delay time for switching from mode 1 to mode 2 can be parameterized. Two actions can be specified, one for mode 1 and one for mode 2. The action is executed on release of the button.
+
+~~~
+subtype-keyword :: "modal"
+trigger-keyword :: "on_mode1" | "on_mode2"
 ~~~
 
 ### Responder Fields
+
+The responder is the specification object that defines the action content. The required content is defined by the API that Air Manager provides for the supported simulators. GCI uses that API for executing the the actions.
 
 ~~~
 responder-field-list :: responder-field (, responder-field-list )
@@ -152,6 +170,8 @@ output-field :: output-spec
 ~~~
 
 ### Output Specification
+
+The Output Specification defines the output value for the action. The specification allows to define no output value, a fixed value, direct or inverted output for buttons, as well as a mix of direct output or inverting, scaling and non-linear responses for axis.
 
 ~~~
 output-spec :: axis-output-spec | other-output-spec
@@ -184,6 +204,8 @@ output-value :: lua-number
 ~~~
 
 ### Defaults
+
+Some of the required specification fields can be omitted. GCI defines default values for them. The specification vene allows to change the default values individually.
 
 ~~~
 defaults-field :: "defaults" : { defaults-list }
@@ -228,6 +250,8 @@ modal-delay-default :: lua-number
 ~~~
 
 ### Attributes
+
+GCI allows to add two attributes to each controller and each control specification. The attributes are mainly for testing and troubleshooting a specification. The `log` attribute controls logging to the Air Manager log file. The `ignore` attribute is meant to temporarily ignore a controller or control specification.
 
 ~~~
 attributes :: attribute-field ( , attributes )
