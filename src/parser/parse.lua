@@ -84,10 +84,19 @@
     end
   end
 
+  parse.value = function (spec)
+    return parse.number(spec) or parse.string(spec) or parse.boolean(spec)
+  end
+    
   -- Test: OK
-  parse.scale = function (spec)
+  parse.scale = function (spec, invert)
     local scale = parse.number(spec)
-    return scale ~= 0 and scale or defaults.axis.scale
+    scale = scale ~= 0 and scale or nil
+    if scale and invert then
+      return -scale
+    else
+      return scale
+    end
   end
  
   -- Test: OK
@@ -105,7 +114,7 @@
         end
       end
       -- create the settings table
-      local scale = parse.scale(scale)
+      local scale = parse.scale(scale) or defaults.axis.scale
       local settings = {}
       for p1, p2 in pairs(points) do
         settings[#settings + 1] = { p1, scale * p2 }
@@ -117,6 +126,76 @@
       end
     end
   end
+
+  parse.output = function ( spec )
+    if type(spec) == "string" then
+      if spec == "input" then
+        spec = { invert = false }
+      elseif spec == "invert" then
+        spec = { invert = true }
+      end
+    end
+
+    local output, argument
+    if type(spec) == "table" then
+      local invert   = parse.boolean(spec.invert)
+      local scale    = parse.scale(spec.scale, invert)
+      local response = parse.response(spec.response, scale)
+      local value    = parse.value(spec.value)
+      
+      if value then
+        output = "fixed"; 
+        argument = value
+      elseif response then
+        output = "nonlinear"; 
+        argument = response
+      elseif scale then
+        output = "scaled"; 
+        argument = scale
+      elseif invert == true then
+        output = "inverted"; 
+        argument = nil
+      elseif invert == false then
+        output = "direct"; 
+        argument = nil
+      end
+    end
+    return output, argument 
+  end
+  
+  parse.responder = function ( spec )
+    local var_id  = parse.string( spec.variable or spec.dataref or spec.var_id )
+    local unit_id = parse.string( spec.unit or spec.type or spec.unit_id )
+    local offset  = parse.number( spec.offset )
+    local force   = parse.boolean( spec.force )
+    local output, value = parse.output( spec.value )
+    output = output or "default"
+    return gci_responder:new {
+      var_id  = var_id,
+      unit_id = unit_id,
+      offset  = offset,
+      force   = force,
+      value   = value,
+      respond = action_map[sim][action],
+      output  = output_map[subtype][output]
+    }
+  end
+  
+  parse.respond = function ( spec )
+    local responders = {}
+    if type(spec) == "table" then
+      for trigger, spec in pairs(spec) do
+        responders[trigger] = parse.responder( spec )
+      end
+    end
+    return responders
+  end
+  
+    -- Test: OK
+  parse.action = function ( spec )
+    return parse.string(spec) or defaults.action
+  end
+  
 
 --{{
   return parse

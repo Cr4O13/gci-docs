@@ -56,9 +56,9 @@
     xpl_command( self.var_id )
   end
 
--- Respond API
+-- Action Map
 -- ---------------------------------------------------------
-  local api = {
+  local action_map = {
     fs2020 = {
       publish   = si_publish,
       write     = fs2020_write,
@@ -78,6 +78,55 @@
       publish   = si_publish,
       write     = xpl_write,
       send      = xpl_send
+    }
+  }
+
+-- Output Functions
+-- ---------------------------------------------------------
+  local function output_null(_) 
+    return nil
+  end  
+  
+  local function output_fixed(_) 
+    return self.value
+  end  
+  
+  local function output_nonlinear(input) 
+    return interpolate_linear(self.value, input, true)
+  end
+
+  local function output_scaled(input) 
+    return input * self.value
+  end
+  
+  local function output_inverted_boolean(input) 
+    return not input
+  end
+
+  local function output_inverted_numeric(input) 
+    return -input 
+  end
+
+  local function output_direct(input) 
+    return input 
+  end
+
+-- Output Map
+-- ---------------------------------------------------------
+  local output_map = {
+    axis = {
+      default    = output_direct,
+      direct     = output_direct,
+      scaled     = output_scaled,
+      inverted   = output_inverted_numeric,
+      nonlinear  = output_nonlinear
+    },
+    button = {
+      default    = output_null,
+      direct     = output_direct,
+      scaled     = output_scaled,
+      inverted   = output_inverted_boolean,
+      nonlinear  = output_nonlinear
     }
   }
 
@@ -108,7 +157,8 @@
 
   --{{
   return {
-    api = api,
+    action_map = action_map,
+    output_map = output_map,
     gci_responder = gci_responder
   }
 --}} ---------------------------------------------------------

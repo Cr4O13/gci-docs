@@ -41,9 +41,7 @@ local function testcases( cases )
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local scale = parse.scale( case.scale )
-      lunit.assertNotNil( scale )
-      lunit.assertIsNumber( scale )
-      lunit.assertEquals( scale, 1 )
+      lunit.assertNil( scale )
     end
   end
   return tests

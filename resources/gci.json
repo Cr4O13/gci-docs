@@ -1,38 +1,49 @@
 { "controllers": [ 
-    { "log": false,
+    { "ignore": false,
+      "log": false,
       "name": "Saitek X52 Pro Flight Control System",
       
       "axes": [ 
-        { "log": false,
+        { "ignore": false,
+          "log": true,
+          "id": { "index" = 0, "label": "JOY Stick Sideways" ], 
           "subtype": "axis", 
-          "id": [ 0, "JOY Stick Sideways" ], 
-          "write": [ "AILERON POSITION", "Position", 
-            { "response": [				
-                [ -1.000, -1.000 ], 
-                [ -0.924, -0.836 ], 
-                [ -0.838, -0.687 ], 
-                [ -0.740, -0.552 ], 
-                [ -0.629, -0.429 ], 
-                [ -0.501, -0.314 ], 
-                [ -0.355, -0.206 ], 
-                [ -0.189, -0.102 ], 
-                [  0.000,  0.000 ], 
-                [  0.189,  0.102 ], 
-                [  0.355,  0.206 ], 
-                [  0.501,  0.314 ], 
-                [  0.629,  0.429 ], 
-                [  0.740,  0.552 ], 
-                [  0.838,  0.687 ], 
-                [  0.924,  0.836 ], 
-                [  1.000,  1.000 ]
-              ]
+          "action": "write", 
+          "respond": {
+            "on_change": {
+              "variable": "AILERON POSITION",
+              "unit": "Position", 
+              "output": {
+                "invert": false
+                "scale": 1,
+                "response": [				
+                  [ -1.000, -1.000 ], 
+                  [ -0.924, -0.836 ], 
+                  [ -0.838, -0.687 ], 
+                  [ -0.740, -0.552 ], 
+                  [ -0.629, -0.429 ], 
+                  [ -0.501, -0.314 ], 
+                  [ -0.355, -0.206 ], 
+                  [ -0.189, -0.102 ], 
+                  [  0.000,  0.000 ], 
+                  [  0.189,  0.102 ], 
+                  [  0.355,  0.206 ], 
+                  [  0.501,  0.314 ], 
+                  [  0.629,  0.429 ], 
+                  [  0.740,  0.552 ], 
+                  [  0.838,  0.687 ], 
+                  [  0.924,  0.836 ], 
+                  [  1.000,  1.000 ]
+                ]
+              }
             }
-          ]       
+          }  
         },
         
         { "log": false,
           "id": [ 1, "JOY Stick Pull" ],
-          "write": [ "ELEVATOR POSITION", "Position", 
+          "action": "write", 
+          "respond":[ "ELEVATOR POSITION", "Position", 
             { "response": [				
                 [ -1.000, -1.000 ], 
                 [ -0.924, -0.836 ], 
@@ -58,7 +69,8 @@
         
         { "log": false,
           "id": [ 2, "TQ Throttle Lever" ], 
-          "write": [ "GENERAL ENG THROTTLE LEVER POSITION:1", "PERCENT",
+          "action": "write", 
+          "respond":[ "GENERAL ENG THROTTLE LEVER POSITION:1", "PERCENT",
             { "scale": 100,
               "response": [				
                 [ -1.000, 1.000	], 
@@ -69,12 +81,14 @@
         },
         
         { "id": [ 3, "JYO Stick Rotate" ],
-          "write": [ "RUDDER POSITION", "POSITION" ]
+          "action": "write", 
+          "respond":[ "RUDDER POSITION", "POSITION" ]
         },
         
         { "log": false,
           "id": [ 4, "TQ Slider" ], 
-          "write": [ "GENERAL ENG PROPELLER LEVER POSITION:1", "PERCENT",
+          "action": "write", 
+          "respond":[ "GENERAL ENG PROPELLER LEVER POSITION:1", "PERCENT",
             { "scale": 100,
               "response": [				
                 [ -1.000, 	0.000	], 
@@ -85,7 +99,8 @@
         },
         
         { "id": [ 5, "TQ Small Knob" ], 
-          "write": [ "GENERAL ENG MIXTURE LEVER POSITION:1", "PERCENT",
+          "action": "write", 
+          "respond":[ "GENERAL ENG MIXTURE LEVER POSITION:1", "PERCENT",
             { "scale": 100,
               "response": [				
                 [ -1.000, 	0.000	], 
@@ -98,7 +113,8 @@
         { "log": false,
           "id": [ 6, "JOY POV left-right" ],
           "subtype": "switched", 
-          "send": { 
+          "action": "send", 
+          "respond":{ 
             "on_plus":  "VIEW_LEFT", 
             "on_minus": "VIEW_RIGHT", 
             "on_zero":  "VIEW_RESET" 
@@ -107,7 +123,8 @@
         
         { "log": false,
           "id": [ 7, "JOY POV up-down" ],   
-          "republish": [ "gci/x52/pov/updwn", "DOUBLE", 0.0 ]
+          "action": "publish", 
+          "respond":[ "gci/x52/pov/updwn", "DOUBLE", 0.0 ]
         }
       ],
       
@@ -124,11 +141,13 @@
         { "log": false,
           "subtype": "button", 
           "id": [  8, "JOY Switch T1" ],
-          "send":  "GEAR_TOGGLE" 
+          "action": "send", 
+          "respond": "GEAR_TOGGLE" 
         }, 
         { "log": false,
           "id": [  9, "JOY Switch T2" ], 
-          "send": {
+          "action": "send", 
+          "respond":{
             "on_true":  [ "GEAR_SET", 0 , "equals Up"   ],
             "on_false": [ "GEAR_SET", 1 , "equals down" ]
           }
@@ -136,7 +155,8 @@
           
         { "log": false,
           "id": [ 10, "JOY Switch T3" ],
-          "send": { 
+          "action": "send", 
+          "respond":{ 
             "on_true":  "GEAR_UP", 
             "on_false": "GEAR_DOWN"
           }
@@ -144,7 +164,8 @@
           
         { "log": false,
           "id": [ 11, "JOY Switch T4" ], 
-          "write": {
+          "action": "write", 
+          "respond":{
             "on_true":  [ "GEAR HANDLE POSITION", "Position", 0 ],
             "on_false": [ "GEAR HANDLE POSITION", "Position", 1 ]
           }
@@ -152,34 +173,40 @@
         
         { "log": false, 
           "id": [ 12, "JOY Switch T5" ], 
-          "republish": [ "gci/x52/t5", "BOOL", false, "input" ]
+          "action": "publish", 
+          "respond":[ "gci/x52/t5", "BOOL", false, "input" ]
         },
         
         { "log": false,
           "id": [ 13, "JOY Switch T6" ], 
-          "republish": [ "gci/x52/t6", "BOOL", true, "invert" ]
+          "action": "publish", 
+          "respond":[ "gci/x52/t6", "BOOL", true, "invert" ]
         },
         
         { "log": false,
           "id": [ 19, "JOY Hat Pull Down" ],
           "subtype": "timed", 
-          "send": "ELEV_TRIM_DN"
+          "action": "send", 
+          "respond":"ELEV_TRIM_DN"
         },
         { "log": false,
           "id": [ 21, "JOY Hat Pull Down" ], 
           "subtype": [ "timed", 0, 100 ],
-          "send": "ELEV_TRIM_UP"
+          "action": "send", 
+          "respond": "ELEV_TRIM_UP"
         },
         
         { "log": false,
           "id": [ 20, "JOY Hat Shift Right" ], 
           "subtype": [ "timed", 0, 500, 4 ],
-          "send": "RUDDER_TRIM_RIGHT" 
+          "action": "send", 
+          "respond":"RUDDER_TRIM_RIGHT" 
         },
         { "log": false,
           "id": [ 22, "JOY Hat Shift Left" ], 
           "subtype": { "name": "timed", "parameters": [0, 500, 4] },  
-          "send": "RUDDER_TRIM_LEFT"
+          "action": "send", 
+          "respond":"RUDDER_TRIM_LEFT"
         },
         
         { "ignore": true, "id": [ 27, "JOY Switch Mode RED"  ] },
