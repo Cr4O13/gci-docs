@@ -1,6 +1,34 @@
 -- ---------------------------------------------------------
--- Test Parse Output Specification
+-- Test Parse Output Value Specification
 -- ---------------------------------------------------------
+--[[---------------------------------------------------------
+value-spec      :: "value" : outut-spec
+output-spec     :: output-arguments | output-shorthand 
+
+output-arguments:: axis-arguments | button-arguments
+axis-arguments  :: { invert-spec, scale-spec, response-spec }
+button-arguments:: { invert-spec, value-spec }
+
+invert-spec     :: "invert" : invert-value
+invert-value    :: boolean
+
+scale-spec      :: "scale" : scale-value
+scale-value     :: number
+
+response-spec : : "response" : response-value
+response-value  :: [ fix-points, fix-points, ... ]
+
+value-spec      :: "value" : value
+value           :: literal-value | global-variable | literal-table
+
+output-shorthand:: axis-shorthand | button-shorthand
+axis-shorthand  :: "invert" | "input"
+button-shorthand:: "invert" | "input" | literal-value | global-variable
+
+literal-value   :: number | string | boolean | null
+literal-table   :: table
+global variable :: identifier
+--]]---------------------------------------------------------
 local parse = require "src/parser/parse"
 local interpolate_functions = require "test/lib/lua_libs/interpolate_functions"
 local var_functions = require "test/lib/lua_libs/var_functions"

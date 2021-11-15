@@ -1,6 +1,32 @@
 -- ---------------------------------------------------------
 -- Test Parse Responder Specification
 -- ---------------------------------------------------------
+--[[---------------------------------------------------------
+responder-spec  :: trigger-name : { var-spec, unit-spec, offset-spec, force-spec, value-spec }
+trigger-name    :: axis-trigger | button-trigger | timed-trigger | switched-trigger | modal-trigger
+
+axis-trigger    :: "on-change"
+button-trigger  :: "on-true"  | "on-false"
+timed-trigger   :: "on-time"  | "on-stop"
+switched-trigger:: "on-plus"  | "on-zero"  | "on-minus"
+modal-trigger   :: "on-mode1" | "on-mode2"
+
+var-spec        :: var-id-name : var
+var-id-name     :: "var-id" | "variable" | "dataref" 
+var             :: string
+
+unit-spec       :: unit-id-name : unit
+unit-id-name    :: "unit-id" | "unit" | "type"
+unit            :: string | null
+
+offset-spec     :: "offset" : offset
+offset          :: integer | null
+
+force-spec      :: "force" : force
+force           :: boolean | null
+
+value-spec      :: (see test_output.lua)
+--]]---------------------------------------------------------
 local model = require "src/model/responder"
 local parse = require "src/parser/parse"
 local lunit = require "test/lib/luaunit"

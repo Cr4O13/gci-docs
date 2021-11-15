@@ -1,6 +1,10 @@
 -- ---------------------------------------------------------
 -- Test Parse Action Specification
 -- ---------------------------------------------------------
+--[[---------------------------------------------------------
+action-spec     :: "action" : action-value
+action-value    :: "write" | "send" | "publish"
+--]]---------------------------------------------------------
 parse = require "src/parser/parse"
 lunit = require "test/lib/luaunit"
 
