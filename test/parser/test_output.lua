@@ -2,12 +2,16 @@
 -- Test Parse Output Value Specification
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
-value-spec      :: "value" : outut-spec
-output-spec     :: output-arguments | output-shorthand 
+output-spec      :: "output" : output-arguments
+output-arguments :: axis-arguments | button-arguments
 
-output-arguments:: axis-arguments | button-arguments
-axis-arguments  :: { invert-spec, scale-spec, response-spec }
-button-arguments:: { invert-spec, value-spec }
+axis-arguments  :: axis-longform | axis-shortform
+axis-longform   :: { invert-spec, scale-spec, response-spec }
+axis_shortform  :: "invert" | "input" | null
+
+button-arguments:: button-longform | button-shortform
+button-longform :: { invert-spec, fixed-value-spec }
+button-shortform:: "invert" | "input" | null | literal-value | global-variable
 
 invert-spec     :: "invert" : invert-value
 invert-value    :: boolean
@@ -15,19 +19,13 @@ invert-value    :: boolean
 scale-spec      :: "scale" : scale-value
 scale-value     :: number
 
-response-spec : : "response" : response-value
-response-value  :: [ fix-points, fix-points, ... ]
+response-spec     :: "response" : response-settings
+response-settings :: [ fix-point, fix-point, ... ]
+fix-point         :: [ input-value, output-value ]
+input-value       :: number
+output-value      :: number
 
-value-spec      :: "value" : value
-value           :: literal-value | global-variable | literal-table
-
-output-shorthand:: axis-shorthand | button-shorthand
-axis-shorthand  :: "invert" | "input"
-button-shorthand:: "invert" | "input" | literal-value | global-variable
-
-literal-value   :: number | string | boolean | null
-literal-table   :: table
-global variable :: identifier
+fixed-value-spec:: (see test_value.lua)
 --]]---------------------------------------------------------
 local parse = require "src/parser/parse"
 local interpolate_functions = require "test/lib/lua_libs/interpolate_functions"
@@ -44,7 +42,7 @@ defaults = {
   }
 }
 
-local response_in = {
+local response_settings = {
   {  1.0, -1.0 },
   {  0.0,  0.0 },
   { -1.0,  1.0 }
@@ -53,7 +51,7 @@ local response_in = {
 local scale = 100
 local val = 100
 
-local outputs = {
+local output_specs = {
   none = {
     test_null   = { },
     test_empty  = { output = {} },
@@ -76,7 +74,7 @@ local outputs = {
     test_scale  = { output = { scale = scale } } 
   },
   non_linear = {
-    test_respon = { output = { response = response_in } }, 
+    test_respon = { output = { response = response_settings } }, 
   }
 }
 
@@ -134,7 +132,7 @@ local function testcases( cases )
 end
 
 -- Test Packages and Cases
-Test_ParseOutput = testcases(outputs)
+Test_ParseOutput = testcases(output_specs)
 
 -- Test Runner
 lunit.LuaUnit.run()

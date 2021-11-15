@@ -2,7 +2,7 @@
 -- Test Parse Responder Specification
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
-responder-spec  :: trigger-name : { var-spec, unit-spec, offset-spec, force-spec, value-spec }
+responder-spec  :: trigger-name : { var-spec, unit-spec, offset-spec, force-spec, output-spec }
 trigger-name    :: axis-trigger | button-trigger | timed-trigger | switched-trigger | modal-trigger
 
 axis-trigger    :: "on-change"
@@ -11,13 +11,13 @@ timed-trigger   :: "on-time"  | "on-stop"
 switched-trigger:: "on-plus"  | "on-zero"  | "on-minus"
 modal-trigger   :: "on-mode1" | "on-mode2"
 
-var-spec        :: var-id-name : var
+var-spec        :: var-id-name : var_id
 var-id-name     :: "var-id" | "variable" | "dataref" 
-var             :: string
+var_id          :: string
 
-unit-spec       :: unit-id-name : unit
+unit-spec       :: unit-id-name : unit_id
 unit-id-name    :: "unit-id" | "unit" | "type"
-unit            :: string | null
+unit_id         :: string | null
 
 offset-spec     :: "offset" : offset
 offset          :: integer | null
@@ -25,7 +25,7 @@ offset          :: integer | null
 force-spec      :: "force" : force
 force           :: boolean | null
 
-value-spec      :: (see test_output.lua)
+output-spec      :: (see test_output.lua)
 --]]---------------------------------------------------------
 local model = require "src/model/responder"
 local parse = require "src/parser/parse"
