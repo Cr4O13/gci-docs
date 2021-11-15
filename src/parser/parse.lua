@@ -141,7 +141,7 @@
       local invert   = parse.boolean(spec.invert)
       local scale    = parse.scale(spec.scale, invert)
       local response = parse.response(spec.response, scale)
-      local value      = parse.value(spec.value)
+      local value    = parse.value(spec.value)
       
       if value then
         output = "fixed"; 
@@ -161,11 +161,6 @@
       end
     end
     return output, argument 
-  end
-  
-  -- Test: OK
-  parse.action = function ( spec )
-    return parse.string(spec) or defaults.action
   end
   
   parse.responder = function ( spec )
@@ -196,6 +191,12 @@
     return responders
   end
   
+    -- Test: OK
+  parse.action = function ( spec )
+    return parse.string(spec) or defaults.action
+  end
+  
+
 --{{
   return parse
 --}} ---------------------------------------------------------
