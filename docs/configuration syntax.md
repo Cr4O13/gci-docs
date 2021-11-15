@@ -2,15 +2,32 @@
 This specifies the syntax for the GCI configuration file
 
 ## JSON-Syntax
-The configuration file uses the JSON syntax. 
+
+The specification file uses the JSON syntax. JSON is quite finnicky about missing or wrong delimiting characters like braces, brackets, commas, colons and quotation marks.
+
+All identifiers need to be enclosed in matching quotation marks. 
+
+Litersl string values need to be enclosed in matching quotation marks as well. 
+
+All other literal values, like numbers, the boolean literals `true` an `false` or the `null` value, must not be enclosed in quotes. 
+
+All fields of an object must be enclosed in matching curly braces `{ }`. Inside the objects, fields must be separated using commas `,`. A field name and its value must be separated with a colon `:`. 
+
+All values of an array must be enclosed in matching curly brackets `[ ]`. Inside the array, values must be separated using commas `,`.
+
 
 ## EBNF Form
+The following subsections describe the GCI syntax in the formal EBNF notation. This is given here for creating test cases and proper implementation only.
+
+The EBNF notation defines the canonical form, which is the JSON object style. For some specification objects an array style form is available as well as a simplified form. This is described in the WIKI documentation where applicable.
 
 ### GCI Configuration
 
+This is the top level entry of the formal notation
+
 ~~~
-gci-configuration :: "{" configuration "}"
-configuration :: controllers-field ( "," defaults-field ) 
+gci-configuration :: "{" configuration-spec "}"
+configuration-spec :: controllers-field ( "," defaults-field ) 
 ~~~
 
 ### Controllers
@@ -35,9 +52,11 @@ axes-field :: "axes" ":" "[" axis-list "]"
 buttons-field :: "buttons" ":" "[" button-list "]"
 
 axis-list :: axis-spec ( "," axis-list )
-axis-spec :: "{" id-field, controls ( "," attributes ) "}"
-
-
+axis-spec :: "{" axis-required-fields ( axis-optional-fields ) "}"
+axis-required-fields :: axis-required-field ( "," axis-required-fields )
+axis-required-field :: id-field | respond-field
+axis-optional-fields :: axis-optional-field ( "," axis-optional-fields )
+axis-optional-field :: subtype-field | action-field | attributes
 button-list :: button-spec ( "," button-list )
 ~~~
 
