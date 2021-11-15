@@ -85,7 +85,7 @@
   end
 
   parse.value = function (spec)
-    return spec
+    return parse.number(spec) or parse.string(spec) or parse.boolean(spec)
   end
     
   -- Test: OK
