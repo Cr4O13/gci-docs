@@ -30,7 +30,6 @@ The responder model must provide the following basic features for responder obje
 ## Usage Requirements
 
 A responder to be based on this model must provide to the 'new' constructor
-- a 'respond' function selected from the global 'api' functions
 - a 'var_id' field, which is either a 
   - a 'variable' string for fs2020, fsx and p3d, or
   - a 'event' string for fs2020, fsx and p3d, or
@@ -43,5 +42,6 @@ A responder to be based on this model must provide to the 'new' constructor
 - for xplane 'write' actions optionally
   - the offset integer
   - the force value (boolean)
-- a 'output' function returning an output value calculated from the given input value
+- a 'respond' function selected from the global 'action_map' functions
+- a 'output' function selected from the global 'output_map' functions
  
