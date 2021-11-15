@@ -5,39 +5,44 @@ This specifies the syntax for the GCI configuration file
 
 The specification file uses the JSON syntax. JSON is quite finnicky about missing or wrong delimiting characters like braces, brackets, commas, colons and quotation marks.
 
-All identifiers need to be enclosed in matching quotation marks. 
+All identifiers need to be enclosed in matching quotation marks `" "`. 
 
-Litersl string values need to be enclosed in matching quotation marks as well. 
+Literal string values need to be enclosed in matching quotation marks as well. 
 
-All other literal values, like numbers, the boolean literals `true` an `false` or the `null` value, must not be enclosed in quotes. 
+All other literal values, like numbers, the boolean literals `true` and `false` or the `null` value, must not be enclosed in quotes. 
 
 All fields of an object must be enclosed in matching curly braces `{ }`. Inside the objects, fields must be separated using commas `,`. A field name and its value must be separated with a colon `:`. 
 
-All values of an array must be enclosed in matching curly brackets `[ ]`. Inside the array, values must be separated using commas `,`.
+All values of an array must be enclosed in matching brackets `[ ]`. Inside the array, values must be separated using commas `,`.
 
+But do not enter parentheses `( )` as they are used only to mark optional elements.
 
 ## EBNF Form
 The following subsections describe the GCI syntax in the formal EBNF notation. This is given here for creating test cases and proper implementation only.
 
 The EBNF notation defines the canonical form, which is the JSON object style. For some specification objects an array style form is available as well as a simplified form. This is described in the WIKI documentation where applicable.
 
+In deviation from standard EBNF rules, all curly braces `{ }`, brackets `[ ]`, colons `:`, quotation marks `" "` and commas `,` used in the EBNF notation below are meant to be entered literally. 
+
+The 
+
 ### GCI Configuration
 
 This is the top level entry of the formal notation
 
 ~~~
-gci-configuration :: "{" configuration-spec "}"
-configuration-spec :: controllers-field ( "," defaults-field ) 
+gci-configuration :: { configuration-spec }
+configuration-spec :: controllers-field ( , defaults-field ) 
 ~~~
 
 ### Controllers
 
 ~~~
-controllers-field :: "controllers" ":" "[" controller-list "]"
-controller-list :: controller-spec ( "," controller-list )
-controller-spec :: "{" controller-name-field, controls ( "," attributes ) "}"
+controllers-field :: "controllers" : [ controller-list ]
+controller-list :: controller-spec ( , controller-list )
+controller-spec :: { controller-name-field, controls ( , attributes ) }
 
-controller-name-field :: "name" ":" controller-name
+controller-name-field :: "name" : controller-name
 controller-name :: string
 ~~~
 
@@ -46,24 +51,24 @@ The controller name must be identical to the name Air Manager returns in the API
 ### Controls
 
 ~~~
-controls :: controls-field ( "," controls )
+controls :: controls-field ( , controls )
 controls-field :: axes-field | buttons-field
-axes-field :: "axes" ":" "[" axis-list "]"
-buttons-field :: "buttons" ":" "[" button-list "]"
+axes-field :: "axes" : [ axis-list ]
+buttons-field :: "buttons" : [ button-list ]
 
-axis-list :: axis-spec ( "," axis-list )
-axis-spec :: "{" axis-required-fields ( axis-optional-fields ) "}"
-axis-required-fields :: axis-required-field ( "," axis-required-fields )
+axis-list :: axis-spec ( , axis-list )
+axis-spec :: { axis-required-fields ( axis-optional-fields ) }
+axis-required-fields :: axis-required-field ( , axis-required-fields )
 axis-required-field :: id-field | respond-field
-axis-optional-fields :: axis-optional-field ( "," axis-optional-fields )
+axis-optional-fields :: axis-optional-field ( , axis-optional-fields )
 axis-optional-field :: subtype-field | action-field | attributes
-button-list :: button-spec ( "," button-list )
+button-list :: button-spec ( , button-list )
 ~~~
 
 ### Defaults
 
 ~~~
-defaults-field :: "defaults" ":" "{" defaults-spec "}"
+defaults-field :: "defaults" : { defaults-spec }
 
 defaults-spec :: 
 
@@ -73,13 +78,13 @@ log-defaults :: log-attribute
 ### Attributes
 
 ~~~
-attributes :: attribute-field ( "," attributes )
+attributes :: attribute-field ( , attributes )
 attribute-field :: ignore-attribute | log-attribute
 
-ignore-attribute :: "ignore" ":" ignore-value
+ignore-attribute :: "ignore" : ignore-value
 ignore-value :: condition
 
-log-attribute :: "log" ":" log-value
+log-attribute :: "log" : log-value
 log-value :: condition
 
 condition :: false-condition | true-condition
