@@ -15,8 +15,6 @@ All fields of an object must be enclosed in matching curly braces `{ }`. Inside 
 
 All values of an array must be enclosed in matching brackets `[ ]`. Inside the array, values must be separated using commas `,`.
 
-But do not enter parentheses `( )` as they are used only to mark optional elements.
-
 ## EBNF Form
 The following subsections describe the GCI syntax in the formal EBNF notation. This is given here for creating test cases and proper implementation only.
 
@@ -24,7 +22,7 @@ The EBNF notation defines the canonical form, which is the JSON object style. Fo
 
 In deviation from standard EBNF rules, all curly braces `{ }`, brackets `[ ]`, colons `:`, quotation marks `" "` and commas `,` used in the EBNF notation below are meant to be entered literally. 
 
-The 
+The double colon `::` an the parentheses `( )` retain their meaning in EBNF. They are not meant to be entered literrally.
 
 ### GCI Configuration
 
