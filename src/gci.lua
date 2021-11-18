@@ -11,6 +11,8 @@ function gci()
 
   local defaults = {
     
+    simulator = "fs2020",
+    
     controller = {
       log = false
     },
@@ -42,6 +44,8 @@ function gci()
     }
   }
 
+  local sim = defaults.simulator
+  
 --{{
 end
 --}}

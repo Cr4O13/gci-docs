@@ -18,7 +18,7 @@
     
     local control = self.controls[type][index]
     if control then
-      self:log_event("INFO", "dispatched", control.id.label)
+      self:log_event("INFO", "dispatched", control.label)
       control:handle(input)
     end
   end
