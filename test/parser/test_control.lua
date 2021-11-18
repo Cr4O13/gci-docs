@@ -5,10 +5,12 @@
 action-field :: action-keyword : { responder-list }
 action-keyword :: "write" | "send" | "publish"
 --]]---------------------------------------------------------
+local control = require "src/model/control"
 local model = require "src/model/responder"
 local parse = require "src/parser/parse"
 local lunit = require "test/lib/luaunit"
 
+input_map           = control.input_map
 action_map          = model.action_map
 output_map          = model.output_map
 local gci_responder = model.gci_responder

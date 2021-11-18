@@ -18,6 +18,8 @@ end
 -- Test Data
 gci_version = "v4.1-beta10"
 
+defaults = {}
+
 configuration = {
   defaults = {},
   controllers = {

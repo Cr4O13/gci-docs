@@ -12,6 +12,7 @@ local lunit = require "test/lib/luaunit"
 
 -- Test Data
 
+defaults = {}
 
 -- Test Cases
 local tests = {

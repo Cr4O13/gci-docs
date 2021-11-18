@@ -207,11 +207,12 @@
         end
         local responders = parse.action( spec[gci_action] )
         if id and responders then
-          return gci_control:new{
+          return gci_control:new {
             index = id.index,
             label = id.label,
             log = parse.log(spec.log) or defaults.control.log,
             subtype = subtype.name,
+            map = input_map[subtype.name],
             parameters = subtype.parameters,
             responders = responders
           }
@@ -280,7 +281,8 @@
 
   parse.configuration = function (spec)
     if type(spec) == "table" then
-      defaults = parse.defaults(defaults, spec.defaults)
+      parse.defaults(defaults, spec.defaults)
+      sim = defaults.simulator
       return parse.controllers(spec.controllers)
     end
   end

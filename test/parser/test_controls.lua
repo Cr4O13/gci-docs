@@ -12,6 +12,7 @@ control-list :: control-spec ( , control-list )
 control-spec :: { required-control-fields ( optional-control-fields ) }
 
 --]]---------------------------------------------------------
+local control = require "src/model/control"
 local model = require "src/model/responder"
 local parse = require "src/parser/parse"
 local mock_am = require "test/mock/airmanager"
@@ -19,6 +20,7 @@ local lunit = require "test/lib/luaunit"
 
 log = mock_am.log
 
+input_map           = control.input_map
 action_map          = model.action_map
 output_map          = model.output_map
 local gci_responder = model.gci_responder

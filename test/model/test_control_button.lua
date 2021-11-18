@@ -16,7 +16,7 @@ fsx_event             = mock_am.sx_event
 xpl_dataref_write     = mock_am.pl_dataref_write
 xpl_command           = mock_am.pl_command
 
-local api           = responder_model.api
+local action_map    = responder_model.action_map
 local gci_responder = responder_model.gci_responder
 local gci_control   = control_model.gci_control
 
@@ -30,7 +30,7 @@ local output = function(input) end
 
 local button_responder = {
   log = true,
-  respond  = api[sim][action],
+  respond  = action_map[sim][action],
   var_id   = event,
   output   = output
 }
