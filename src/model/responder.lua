@@ -81,31 +81,31 @@
   }
 
 -- Output Functions
-  local function output_null(_) 
+  local function output_null(self, _) 
     return nil
   end  
   
-  local function output_fixed(_) 
+  local function output_fixed(self, _) 
     return self.value
   end  
   
-  local function output_nonlinear(input) 
+  local function output_nonlinear(self, input) 
     return interpolate_linear(self.value, input, true)
   end
 
-  local function output_scaled(input) 
+  local function output_scaled(self, input) 
     return input * self.value
   end
   
-  local function output_inverted_boolean(input) 
+  local function output_inverted_boolean(self, input) 
     return not input
   end
 
-  local function output_inverted_numeric(input) 
+  local function output_inverted_numeric(self, input) 
     return -input 
   end
 
-  local function output_direct(input) 
+  local function output_direct(self, input) 
     return input 
   end
 
