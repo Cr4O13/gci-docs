@@ -177,8 +177,8 @@
         offset  = offset,
         force   = force,
         value   = value,
-        respond = action_map[sim][action],
-        output  = output_map[subtype][output]
+        respond = action_map[sim][gci_action],
+        output  = output_map[gci_control_type][output]
       }
     end
   end
@@ -192,7 +192,33 @@
       return responders
     end
   end
-  
+
+  parse.control = function ( spec )
+    if type(spec) == "table" then
+      if not spec.ignore then
+        local id = parse.id(spec.id)
+        
+        local subtype = parse.subtype(spec.subtype or gci_control_type)
+        
+        if spec.write then gci_action = "write" 
+        elseif spec.send then gci_action = "send"
+        elseif spec.publish then gci_action = "publish" 
+        end
+        local responders = parse.action( spec[gci_action] )
+        if id and responders then
+          return gci_control:new{
+            index = id.index,
+            label = id.label,
+            log = parse.log(spec.log) or defaults.control.log,
+            subtype = subtype.name,
+            parameters = subtype.parameters,
+            responders = responders
+          }
+        end
+      end
+    end
+  end
+
 --{{
   return parse
 --}} ---------------------------------------------------------
