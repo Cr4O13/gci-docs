@@ -219,6 +219,22 @@
     end
   end
 
+  parse.controls = function (control_type, spec)
+    if type(spec) == "table" then
+      local controls = {}
+      for _, cspec in ipairs(spec) do
+        gci_control_type = control_type
+        local control = parse.control( cspec )
+        if control then
+          control:log_event("INFO", "added", control_type, control.label )
+          controls[control.index] = control
+        end
+        gci_control_type = nil
+      end
+      return controls
+    end
+  end
+
 --{{
   return parse
 --}} ---------------------------------------------------------
