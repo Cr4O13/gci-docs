@@ -5,11 +5,11 @@
 -- The GCI Control Model
 -- ---------------------------------------------------------
   local input_map = {
-    axis = function (_) 
+    axis = function (self, _) 
       return "on_change" 
     end,
     
-    button = function (input)
+    button = function (self, input)
       if input == true then
         return "on_true"
       elseif input == false then
@@ -17,7 +17,7 @@
       end
     end,
     
-    timed = function (input) 
+    timed = function (self, input) 
       if input == true then
         return "on_time"
       elseif input == false then
@@ -25,7 +25,7 @@
       end
     end,
     
-    modal = function (input)
+    modal = function (self, input)
       if input == false then
         if self.mode2 then
           return "on_mode2"
@@ -35,7 +35,7 @@
       end
     end,
     
-    switched = function (input)
+    switched = function (self, input)
       if input < 0.0 then
         return "on_minus" 
       elseif input > 0.0 then
@@ -61,7 +61,7 @@
 
   function gci_control:handle(input)
     self:log_event("INFO", "handle", self.subtype, self.label, input)
-    local responder = self.responders[ self.map(input) ]
+    local responder = self.responders[ self:map(input) ]
     if responder then
       self:handler( responder, input )
     else
