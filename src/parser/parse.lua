@@ -235,6 +235,22 @@
     end
   end
 
+  parse.controller = function ( spec )
+    if not spec.ignore then
+      local name = parse.string(spec.name)
+      if name then
+        local controls = {}
+        controls[0] = parse.controls("axis", spec.axes) or {}
+        controls[1] = parse.controls("button", spec.buttons) or {}
+        return gci_controller:new{ 
+          name = name,
+          log = parse.log(spec.log) or defaults.controller.log,
+          controls = controls
+        }
+      end
+    end 
+  end
+  
 --{{
   return parse
 --}} ---------------------------------------------------------
