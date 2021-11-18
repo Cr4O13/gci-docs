@@ -6,7 +6,8 @@
   gci_controller  = controller.gci_controller
   gci_control     = control.gci_control
   gci_responder   = responder.gci_responder  
---}} ---------------------------------------------------------
+--}}
+-- ---------------------------------------------------------
 -- The GCI Configuration Parser
 -- ---------------------------------------------------------
   local parse = {}
@@ -283,7 +284,7 @@
       return parse.controllers(spec.controllers)
     end
   end
-  
+
 --{{
   return parse
---}} ---------------------------------------------------------
+--}}

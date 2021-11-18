@@ -1,11 +1,11 @@
 --{{
   gci_base = require "src/model/base"
---}} ---------------------------------------------------------
+--}}
+-- ---------------------------------------------------------
 -- The GCI Responder Model
 -- ---------------------------------------------------------
 
--- Respond functions
--- ---------------------------------------------------------
+-- Respond functions 
   local function si_publish(self, input)
     si_variable_write( self.var_id, self.output(input) )
   end
@@ -57,7 +57,6 @@
   end
 
 -- Action Map
--- ---------------------------------------------------------
   local action_map = {
     fs2020 = {
       publish   = si_publish,
@@ -82,7 +81,6 @@
   }
 
 -- Output Functions
--- ---------------------------------------------------------
   local function output_null(_) 
     return nil
   end  
@@ -112,7 +110,6 @@
   end
 
 -- Output Map
--- ---------------------------------------------------------
   local output_map = {
     axis = {
       default    = output_direct,
@@ -131,7 +128,6 @@
   }
 
 -- GCI Responder 
--- ---------------------------------------------------------
   local gci_responder = gci_base:new {
     events = {
       send     = "responds with %s('%s', '%s')",
@@ -154,11 +150,11 @@
 
     return responder
   end
-
+  
   --{{
   return {
     action_map = action_map,
     output_map = output_map,
     gci_responder = gci_responder
   }
---}} ---------------------------------------------------------
+--}}

@@ -1,6 +1,7 @@
 --{{
   gci_base = require "src/model/base"
---}} ---------------------------------------------------------
+--}}
+-- ---------------------------------------------------------
 -- The GCI Controller Model
 -- ---------------------------------------------------------
   local gci_controller = gci_base:new {
@@ -41,8 +42,9 @@
       self:log_event("WARN", "not_found", controller.name)
     end
   end
+  
 --{{
   return {
     gci_controller = gci_controller
   }
---}} ---------------------------------------------------------
+--}}

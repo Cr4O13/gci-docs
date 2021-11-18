@@ -1,8 +1,9 @@
--- ---------------------------------------------------------------------
 --{{
 parse = require "src/parser/parse"
--- function gci(customhandlers)
---}} -- Main
+function gci()
+--}}
+-- ---------------------------------------------------------------------
+-- Main
 -- ---------------------------------------------------------------------
   local function main()
     log("INFO", "GCI: Using Game Controller Integration " .. gci_version)
@@ -15,11 +16,10 @@ parse = require "src/parser/parse"
       return {}
     end
   end
---{{
-  return {
-    main = main
-  }
---}} end
+  
+  return main()
+end 
+
 -- ---------------------------------------------------------------------
--- END  Game Controller Integration
+-- END Game Controller Integration
 -- ---------------------------------------------------------------------
