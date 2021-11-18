@@ -82,10 +82,9 @@ subtype-keyword :: subtype-keyword
 parameter-list :: parameter-value ( , parameter-list )
 parameter-value :: lua-value
 
-action-field :: "action" : action-keyword
+action-field :: action-keyword : { responder-list }
 action-keyword :: "write" | "send" | "publish"
 
-respond-field :: "respond" : { responder-list }
 responder-list :: responder-spec ( , responders-list )
 
 responder-spec :: subtype-trigger-keyword : { responder-field-list } 
