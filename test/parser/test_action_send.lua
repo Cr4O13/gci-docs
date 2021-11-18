@@ -1,30 +1,41 @@
 -- ---------------------------------------------------------
--- Test Parse Action Specification
+-- Test Parse Send Responders
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
 action-field :: action-keyword : { responder-list }
 action-keyword :: "write" | "send" | "publish"
 --]]---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+local model = require "src/model/responder"
+local parse = require "src/parser/parse"
+local lunit = require "test/lib/luaunit"
+
+action_map          = model.action_map
+output_map          = model.output_map
+local gci_responder = model.gci_responder
 
 -- Test Data
-local responder_list = {
+-- Test Data
+sim    = "fs2020"
+action = "send"
+subtype = "axis"
+
+
+local responder_list = { 
+  on_true = {},
+  on_false = {}
 }
-action_keywords = { "write", "send", "publish" }
+
+local test_spec = {}
+test_spec[action] = responder_list
 
 local tests = {
   succeeds = {
-    test_write    = { write = responder_list },
-    test_send     = { send = responder_list },
-    test_publish  = { publish = responder_list },
+    test_send = test_spec
   },
   fails = {
-    test_null       = { },
-    test_bool       = { write = true       },
-    test_number     = { send = 8           },
-    test_empty      = { publish = "it"     },
-    test_obj_alias  = { action = { }       },
+    test_empty      = { send = {}          },
+    test_obj_alias  = { send = { test_action } },
+    test_seq_alias  = { send = { 8 }       }
   }
 }
 
@@ -35,14 +46,15 @@ local function testcases( cases )
     tests[name] = function ()
       local responders = parse.action( case.write or case.send or case.publish )
       lunit.assertNotNil( responders )
-      lunit.assertEquals( responders, {} )
+      lunit.assertNotNil( responders.on_true )
+      lunit.assertNotNil( responders.on_false )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local responders = parse.action( case.write or case.send or case.publish )
-      lunit.assertNil( responders )
-
+      lunit.assertNotNil( responders )
+      lunit.assertEquals( responders, {} )
     end
   end
   return tests
