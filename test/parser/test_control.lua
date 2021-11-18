@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------
--- Test Parse Send Responders
+-- Test Parse Control Specification
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
 action-field :: action-keyword : { responder-list }
@@ -16,52 +16,45 @@ local gci_responder = model.gci_responder
 -- Test Data
 -- Test Data
 sim    = "fs2020"
-gci_action = "send"
-gci_control_type = "axis"
 
-
-local responder_list = { 
-  on_true = {},
-  on_false = {}
-}
-
-local test_spec = {}
-test_spec[gci_action] = responder_list
+-- Test Data
+gci_control_type = "button"
 
 local tests = {
   succeeds = {
-    test_send = test_spec
+    test_ctrl = { 
+      log = true,
+      id = { index = 0, label = "Label" },
+      send = { on_true = { event = "EVENT" } }
+    }
   },
   fails = {
-    test_empty      = { send = {}          },
-    test_obj_alias  = { send = { test_action } },
-    test_seq_alias  = { send = { 8 }       }
+
   }
 }
 
 -- Create Test Cases
 local function testcases( cases )
   local tests = {}
-  for name, case in pairs(cases.succeeds) do
+  for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
-      local responders = parse.action( case.write or case.send or case.publish )
-      lunit.assertNotNil( responders )
-      lunit.assertNotNil( responders.on_true )
-      lunit.assertNotNil( responders.on_false )
+      local control = parse.control( spec )
+      lunit.assertNotNil( control )
+
     end
   end
-  for name, case in pairs(cases.fails) do
+  for name, spec in pairs(cases.fails) do
     tests[name] = function ()
-      local responders = parse.action( case.write or case.send or case.publish )
-      lunit.assertNotNil( responders )
-      lunit.assertEquals( responders, {} )
+      local control = parse.control( spec )
+      lunit.assertNil( control )
+
     end
   end
   return tests
 end
 
 -- Test Packages and Cases
-Test_ParseAction = testcases(tests)
+Test_ParseControl = testcases(tests)
 
 -- Test Runner
 lunit.LuaUnit.run()

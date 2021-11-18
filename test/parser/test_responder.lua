@@ -37,8 +37,8 @@ local gci_responder = model.gci_responder
 
 -- Test Data
 sim    = "fs2020"
-action = "send"
-subtype = "axis"
+gci_action = "send"
+gci_control_type = "axis"
 
 local event      = "AP_MASTER"
 local commandref = "a/simple/commandref"
