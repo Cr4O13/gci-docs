@@ -264,7 +264,20 @@
       return controllers
     end
   end
-  
+
+  parse.defaults = function (defaults, spec)
+    if type(spec) == "table" then
+      for k, v in pairs(spec) do
+        if (type(v) == "table") and (type(defaults[k] or false) == "table") then
+          parse.defaults(defaults[k], spec[k])
+        else
+          defaults[k] = v
+        end
+      end
+    end
+    -- return defaults
+  end
+
 --{{
   return parse
 --}} ---------------------------------------------------------
