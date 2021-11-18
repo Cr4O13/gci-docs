@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------
--- Test Parse Controller Specification
+-- Test Parse User Defaults Spec
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
 defaults-field :: "defaults" : { defaults-list }
@@ -69,7 +69,7 @@ local function testcases( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
-      local new = parse.defaults( defaults, spec )
+      parse.defaults( defaults, spec )
       lunit.assertNotNil( defaults )
       lunit.assertNotNil( defaults.section )
       lunit.assertNotNil( defaults.section.attribute )
