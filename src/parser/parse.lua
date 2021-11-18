@@ -164,39 +164,35 @@
   end
   
   parse.responder = function ( spec )
-    local var_id  = parse.string( spec.variable or spec.dataref or spec.var_id )
-    local unit_id = parse.string( spec.unit or spec.type or spec.unit_id )
-    local offset  = parse.number( spec.offset )
-    local force   = parse.boolean( spec.force )
-    local output, value = parse.output( spec.value )
-    output = output or "default"
-    return gci_responder:new {
-      var_id  = var_id,
-      unit_id = unit_id,
-      offset  = offset,
-      force   = force,
-      value   = value,
-      respond = action_map[sim][action],
-      output  = output_map[subtype][output]
-    }
+    if type(spec) == "table" then
+      local var_id  = parse.string( spec.variable or spec.dataref or spec.var_id )
+      local unit_id = parse.string( spec.unit or spec.type or spec.unit_id )
+      local offset  = parse.number( spec.offset )
+      local force   = parse.boolean( spec.force )
+      local output, value = parse.output( spec.value )
+      output = output or "default"
+      return gci_responder:new {
+        var_id  = var_id,
+        unit_id = unit_id,
+        offset  = offset,
+        force   = force,
+        value   = value,
+        respond = action_map[sim][action],
+        output  = output_map[subtype][output]
+      }
+    end
   end
   
-  parse.respond = function ( spec )
-    local responders = {}
+  parse.action = function ( spec )
     if type(spec) == "table" then
+      local responders = {}
       for trigger, spec in pairs(spec) do
         responders[trigger] = parse.responder( spec )
       end
+      return responders
     end
-    return responders
   end
   
-    -- Test: OK
-  parse.action = function ( spec )
-    return parse.string(spec) or defaults.action
-  end
-  
-
 --{{
   return parse
 --}} ---------------------------------------------------------
