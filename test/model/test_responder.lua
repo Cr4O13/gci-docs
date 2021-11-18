@@ -36,7 +36,7 @@ local responder = {}
 responder.respond  = action_map[sim][action]
 responder.var_id   = event
 responder.unit_id  = unit
-responder.output   = function(input) return input end
+responder.output   = function(self, input) return input end
 
 
 test_interface = function()
