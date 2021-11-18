@@ -250,6 +250,20 @@
       end
     end 
   end
+
+  parse.controllers = function (spec)
+    if type(spec) == "table" then
+      local controllers = {}
+      for _, cspec in ipairs(spec) do
+        local controller = parse.controller( cspec )
+        if controller then
+          -- controller:log_event("INFO", "added", controller.name)
+          controllers[controller.name] = controller
+        end
+      end
+      return controllers
+    end
+  end
   
 --{{
   return parse
