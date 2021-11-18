@@ -275,9 +275,15 @@
         end
       end
     end
-    -- return defaults
   end
 
+  parse.configuration = function (spec)
+    if type(spec) == "table" then
+      defaults = parse.defaults(defaults, spec.defaults)
+      return parse.controllers(spec.controllers)
+    end
+  end
+  
 --{{
   return parse
 --}} ---------------------------------------------------------
