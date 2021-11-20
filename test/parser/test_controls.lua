@@ -12,26 +12,18 @@ control-list :: control-spec ( , control-list )
 control-spec :: { required-control-fields ( optional-control-fields ) }
 
 --]]---------------------------------------------------------
-local control = require "src/model/control"
-local model = require "src/model/responder"
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local mock_am = require "test/mock/airmanager"
-local lunit = require "test/lib/luaunit"
-
-log = mock_am.log
-
-input_map           = control.input_map
-action_map          = model.action_map
-output_map          = model.output_map
-local gci_responder = model.gci_responder
+local airmanager = require "test/mock/airmanager"
 
 -- Test Data
-sim    = "fs2020"
+-- Model Data
+-- Test Case Data
+local base_type = "button"
 
--- Test Data
-local control_type = "button"
-
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_ctrls = { 
       { log = true,
@@ -41,32 +33,29 @@ local tests = {
     }
   },
   fails = {
-
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
-      local controls = parse.controls( control_type, spec )
-      lunit.assertNotNil( controls )
-
+      local controls = parse.controls( base_type, spec )
+      lu.assertNotNil( controls )
     end
   end
   for name, spec in pairs(cases.fails) do
     tests[name] = function ()
-      local controls = parse.controls( control_type, spec )
-      lunit.assertNil( controls )
-
+      local controls = parse.controls( base_type, spec )
+      lu.assertNil( controls )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseControls = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

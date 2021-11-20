@@ -1,13 +1,22 @@
 -- ---------------------------------------------------------
--- Test Parse Log Specification
+-- Test GCI - Parse Log Attribute Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+log-attribute :: "log" : log-value
+log-value :: condition
 
-defaults = {}
+condition :: false-condition | true-condition
+false-condition :: false | null
+true-condition :: <any value different from false-condition> 
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
-local tests = {
+-- Model Data
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_true       = { log = true },
     test_string     = { log = "string" },
@@ -20,26 +29,26 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local log = parse.log( case.log )
-      lunit.assertTrue( log )
+      lu.assertTrue( log )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local log = parse.log( case.log )
-      lunit.assertNil( log )
+      lu.assertNil( log )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseLog = testcases( tests ) 
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

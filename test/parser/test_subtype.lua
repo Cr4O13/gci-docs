@@ -1,14 +1,21 @@
 -- ---------------------------------------------------------
--- Test Parse Subtype Specification
+-- Test GCI - Parse Subtype Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+subtype-field :: "subtype" : { "name" : subtype-keyword ( , "parameters" : { parameter-list } ) }
+subtype-keyword :: subtype-keyword
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
+-- Model Data
+-- Test Case Data
 local sub_name = "subtype"
 local sub_params = { 8 }
 
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_obj          = { subtype = { name = sub_name } },
     test_obj_pempty   = { subtype = { name = sub_name, parameters = {} } },
@@ -39,27 +46,27 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local subtype = parse.subtype( case.subtype )
-      lunit.assertNotNil( subtype )
-      lunit.assertEquals( subtype.name, sub_name )
+      lu.assertNotNil( subtype )
+      lu.assertEquals( subtype.name, sub_name )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local subtype = parse.subtype( case.subtype )
-      lunit.assertNil( subtype )
+      lu.assertNil( subtype )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseSubtype = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

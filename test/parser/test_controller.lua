@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------
--- Test Parse Controller Specification
+-- Test GCI - Parse Controller Specification
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
 controller-spec :: { controller-name-field, controls ( , attributes ) }
@@ -12,25 +12,16 @@ controls-field :: axes-field | buttons-field
 axes-field :: "axes" : [ control-list ]
 buttons-field :: "buttons" : [ control-list ]
 --]]---------------------------------------------------------
-local model = require "src/model/responder"
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local mock_am = require "test/mock/airmanager"
-local lunit = require "test/lib/luaunit"
+local airmanager = require "test/mock/airmanager"
 
-log = mock_am.log
-
-action_map          = model.action_map
-output_map          = model.output_map
-local gci_responder = model.gci_responder
-
--- Test Data
-sim    = "fs2020"
-
+-- Model Data
+-- Test Case Data
 local controller_name = "Controller"
 local axes = {}
 local buttons = {}
-
-local control_type = "button"
 
 local controller_spec = { 
   log = true,
@@ -39,7 +30,8 @@ local controller_spec = {
   buttons = buttons
 }
 
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_spec = controller_spec
   },
@@ -48,28 +40,26 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
       local controller = parse.controller( spec )
-      lunit.assertNotNil( controller )
-
+      lu.assertNotNil( controller )
     end
   end
   for name, spec in pairs(cases.fails) do
     tests[name] = function ()
       local controller = parse.controller( spec )
-      lunit.assertNil( controller )
-
+      lu.assertNil( controller )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseController = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

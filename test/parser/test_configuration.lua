@@ -7,15 +7,16 @@ configuration-spec :: controllers-field ( , defaults-field )
 controllers-field :: "controllers" : [ controller-list ]
 defaults-field :: "defaults" : { defaults-list }
 --]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local lunit = require "test/lib/luaunit"
 
--- Test Data
-
+-- Model Data
+-- Test Case Data
 defaults = {}
 
--- Test Cases
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_empty =  { defaults =  {}, controllers = {} }
   },
@@ -24,28 +25,26 @@ local tests = {
   }
 }
 
--- Create Test cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
       local controllers = parse.configuration( spec )
-      lunit.assertNotNil( controllers )
-
+      lu.assertNotNil( controllers )
     end
   end
   for name, spec in pairs(cases.fails) do
     tests[name] = function ()
       local controllers = parse.configuration( spec )
-      lunit.assertNil( controllers )
-      
+      lu.assertNil( controllers )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseConfiguration = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

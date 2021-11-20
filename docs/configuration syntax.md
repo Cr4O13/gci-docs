@@ -148,7 +148,7 @@ responder-field-list :: responder-field (, responder-field-list )
 responder-field :: var-id-field | unit-id-field | offset-field | force-field | output-field
 
 var-id-field :: var-id-keyword : var-identifier
-var-id-keyword :: "var_id" | "variable" | "dataref"
+var-id-keyword :: "var_id" | "variable" | "dataref" | "event" | "commandref"
 var-identifier :: lua-string
 
 unit-id-field :: unit-id-keyword : unit-identifier

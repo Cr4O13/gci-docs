@@ -1,17 +1,17 @@
 -- ---------------------------------------------------------
--- Test Parse Axis Output Scale Specification
+-- Test GCI - Parse Axis Output Scale Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+requirements to test
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
-defaults = {
-  axis = {
-    scale = 1
-  }
-}
-
-local tests = {
+-- Model Data
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_ident = { scale = 1 },
     test_real  = { scale = 0.5 },
@@ -27,28 +27,28 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local scale = parse.scale( case.scale )
-      lunit.assertNotNil( scale )
-      lunit.assertIsNumber( scale )
-      lunit.assertNotIs( scale, 0 )
+      lu.assertNotNil( scale )
+      lu.assertIsNumber( scale )
+      lu.assertNotIs( scale, 0 )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local scale = parse.scale( case.scale )
-      lunit.assertNil( scale )
+      lu.assertNil( scale )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseSubtype = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

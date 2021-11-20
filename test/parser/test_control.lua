@@ -5,23 +5,18 @@
 action-field :: action-keyword : { responder-list }
 action-keyword :: "write" | "send" | "publish"
 --]]---------------------------------------------------------
-local control = require "src/model/control"
-local model = require "src/model/responder"
+-- Imports
+local lu = require "test/lib/luaunit"
+--local control = require "src/model/control"
+--local responder = require "src/model/responder"
 local parse = require "src/parser/parse"
-local lunit = require "test/lib/luaunit"
 
-input_map           = control.input_map
-action_map          = model.action_map
-output_map          = model.output_map
-local gci_responder = model.gci_responder
+-- Model Data
+-- Test Case Data
+local base_type = "axis"
 
--- Test Data
-sim    = "fs2020"
-
--- Test Data
-gci_control_type = "button"
-
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_ctrl = { 
       log = true,
@@ -34,28 +29,26 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
-      local control = parse.control( spec )
-      lunit.assertNotNil( control )
-
+      local control = parse.control( base_type, spec )
+      lu.assertNotNil( control )
     end
   end
   for name, spec in pairs(cases.fails) do
     tests[name] = function ()
       local control = parse.control( spec )
-      lunit.assertNil( control )
-
+      lu.assertNil( control )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseControl = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

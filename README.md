@@ -39,6 +39,7 @@ Support for custom input handlers
 GCI interfaces with Air Manager through its published API.
 
 GCI uses the following API functions:
+- static_data_load
 - game_controller_add
 - si_variable_write
 - fs2020_variable_write
@@ -47,4 +48,5 @@ GCI uses the following API functions:
 - fsx_event
 - xpl_dataref_write
 - xpl_command
+- interpolate_linear
 - log
