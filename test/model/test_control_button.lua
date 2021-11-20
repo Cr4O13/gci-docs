@@ -1,76 +1,96 @@
 -- ---------------------------------------------------------
--- Test Button Control
+-- Test GCI - Button Control
 -- ---------------------------------------------------------
-local responder_model = require "src/model/responder"
-local control_model = require "src/model/control"
-local mock_am = require "test/mock/airmanager"
-local lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+requirements to test
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
 
-log = mock_am.log
+local gci = require "src/gci"
+local defaults = gci.defaults
 
-si_variable_write     = mock_am.si_variable_write
-fs2020_variable_write = mock_am.fs2020_variable_write
-fs2020_event          = mock_am.fs2020_event
-fsx_variable_write    = mock_am.sx_variable_write
-fsx_event             = mock_am.sx_event
-xpl_dataref_write     = mock_am.pl_dataref_write
-xpl_command           = mock_am.pl_command
+local responder = require "src/model/responder"
+local action_map    = responder.action_map
+local output_map    = responder.output_map
+local gci_responder = responder.gci_responder
 
-local action_map    = responder_model.action_map
-local gci_responder = responder_model.gci_responder
-local gci_control   = control_model.gci_control
+local control = require "src/model/control"
+local input_map   = control.input_map
+local gci_control   = control.gci_control
 
--- Test Data
+local airmanager = require "test/mock/airmanager"
+
+-- Model Data
 local sim      = "fs2020"
+local subtype  = "button"
+local index    = 0
+local label    = "B0"
+
 local action   = "send"
-
 local event    = "AP_MASTER"
-
-local output = function(input) end
+local output   = "default"
 
 local button_responder = {
   log = true,
   respond  = action_map[sim][action],
   var_id   = event,
-  output   = output
+  output   = output_map[subtype][output]
 }
 
 local responders = {}
-responders["on_true"]  = gci_responder:new(button_responder)
+responders[ defaults[subtype].trigger ]  = gci_responder:new(button_responder)
 
   
-local button = {
+local model = {
   log = true,
-  subtype = "button",
-  id = { index = 0, label = "B0" },
-  
-  map = function (input) if input then return "on_true" else return "on_false" end end,
-  
+  subtype = subtype,
+  index = index,
+  label = label,
+  map = input_map[subtype],
   responders = responders
 }
 
---function button:handler( responder, input )
---  responder:respond(input)
---end
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
+  on_true = {
+    test_handle_true = model
+  },
+  on_false = {
+    test_handle_false = model
+  }
+}  
 
-test_handle_true = function()
-  local button_control = gci_control:new( button )
-  lunit.assertNotNil(button_control.handle)
-  spy_variable = {}
-  local input = true
-  button_control:handle(input)
-  lunit.assertEquals(spy_variable[event][1], nil)
-  lunit.assertEquals(spy_variable[event][2], nil)
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
+  local tests = {}
+  for name, spec in pairs(cases.on_true) do
+    tests[name] = function ()
+      local button_control = gci_control:new( model )
+      lu.assertNotNil(button_control.handle)
+      spy_variable = {}
+      local input = true
+      button_control:handle(input)
+      lu.assertEquals(spy_variable[event][1], nil)
+      lu.assertEquals(spy_variable[event][2], nil)
+    end
+  end
+  for name, spec in pairs(cases.on_false) do
+    tests[name] = function ()
+      local button_control = gci_control:new( model )
+      lu.assertNotNil(button_control.handle)
+      spy_variable = {}
+      local input = false
+      button_control:handle(input)
+      lu.assertNil(spy_variable[event])
+    end
+  end
+  return tests
 end
-
-test_handle_false = function()
-  local button_control = gci_control:new( button )
-  lunit.assertNotNil(button_control.handle)
-  spy_variable = {}
-  local input = false
-  button_control:handle(input)
-  lunit.assertNil(spy_variable[event])
-end
+  
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()
