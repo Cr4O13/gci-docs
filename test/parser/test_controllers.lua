@@ -5,25 +5,15 @@
 controllers-field :: "controllers" : [ controller-list ]
 controller-list :: controller-spec ( , controller-list )
 --]]---------------------------------------------------------
-local model = require "src/model/responder"
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local mock_am = require "test/mock/airmanager"
-local lunit = require "test/lib/luaunit"
+local airmanager = require "test/mock/airmanager"
 
-log = mock_am.log
-
-action_map          = model.action_map
-output_map          = model.output_map
-local gci_responder = model.gci_responder
-
--- Test Data
-sim    = "fs2020"
-
-local controller_name = "Controller"
+-- Model Data
+-- Test Case Data
 local axes = {}
 local buttons = {}
-
-local control_type = "button"
 
 local controllers_spec = {
   {
@@ -40,37 +30,35 @@ local controllers_spec = {
   }
 }
 
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_spec = controllers_spec
   },
   fails = {
-
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
       local controllers = parse.controllers( spec )
-      lunit.assertNotNil( controllers )
-
+      lu.assertNotNil( controllers )
     end
   end
   for name, spec in pairs(cases.fails) do
     tests[name] = function ()
       local controllers = parse.controllers( spec )
-      lunit.assertNil( controllers )
-
+      lu.assertNil( controllers )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseController = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

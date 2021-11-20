@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------
--- Test Parse Output Value Specification
+-- Test GCI - Parse Output Value Specification
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
 output-spec      :: "output" : output-arguments
@@ -27,21 +27,12 @@ output-value      :: number
 
 fixed-value-spec:: (see test_value.lua)
 --]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local interpolate_functions = require "test/lib/lua_libs/interpolate_functions"
-local var_functions = require "test/lib/lua_libs/var_functions"
-local lunit = require "test/lib/luaunit"
 
-interpolate_linear = interpolate_functions.interpolate_linear
-var_cap = var_functions.var_cap
-
--- Test Data
-defaults = {
-  axis = {
-    scale = 1
-  }
-}
-
+-- Model Data
+-- Test Case Data
 local response_settings = {
   {  1.0, -1.0 },
   {  0.0,  0.0 },
@@ -51,7 +42,8 @@ local response_settings = {
 local scale = 100
 local val = 100
 
-local output_specs = {
+-- Test Case Specifications
+local testcases = {
   none = {
     test_null   = { },
     test_empty  = { output = {} },
@@ -78,61 +70,61 @@ local output_specs = {
   }
 }
 
-local input = 1.0
+--local input = 1.0
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.direct) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lunit.assertNotNil( output )
-      lunit.assertIsString( output )
-      lunit.assertEquals( output, "direct" )
+      lu.assertNotNil( output )
+      lu.assertIsString( output )
+      lu.assertEquals( output, "direct" )
     end
   end
   for name, case in pairs(cases.inverted) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lunit.assertNotNil( output )
-      lunit.assertIsString( output )
-      lunit.assertEquals( output, "inverted" )
+      lu.assertNotNil( output )
+      lu.assertIsString( output )
+      lu.assertEquals( output, "inverted" )
     end
   end
   for name, case in pairs(cases.none) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lunit.assertNil( output )
+      lu.assertNil( output )
     end
   end  for name, case in pairs(cases.scaled) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lunit.assertNotNil( output )
-      lunit.assertIsString( output )
-      lunit.assertEquals( output, "scaled" )
+      lu.assertNotNil( output )
+      lu.assertIsString( output )
+      lu.assertEquals( output, "scaled" )
     end
   end
   for name, case in pairs(cases.fixed) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lunit.assertNotNil( output )
-      lunit.assertIsString( output )
-      lunit.assertEquals( output, "fixed" )
+      lu.assertNotNil( output )
+      lu.assertIsString( output )
+      lu.assertEquals( output, "fixed" )
     end
   end
     for name, case in pairs(cases.non_linear) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lunit.assertNotNil( output )
-      lunit.assertIsString( output )
-      lunit.assertEquals( output, "nonlinear" )
+      lu.assertNotNil( output )
+      lu.assertIsString( output )
+      lu.assertEquals( output, "nonlinear" )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseOutput = testcases(output_specs)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

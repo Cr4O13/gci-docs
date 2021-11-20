@@ -1,80 +1,29 @@
 -- ---------------------------------------------------------
 -- Test Axis Control
 -- ---------------------------------------------------------
-local responder_model = require "src/model/responder"
-local control_model = require "src/model/control"
-local mock_am = require "test/mock/airmanager"
+-- Imports
+local lu = require "test/lib/luaunit"
+
+local gci = require "src/gci"
+local sim = gci.sim
+
+local responder = require "src/model/responder"
+local action_map    = responder.action_map
+local output_map    = responder.output_map
+local gci_responder = responder.gci_responder
+
+local control = require "src/model/control"
+local input_map     = control.input_map
+local gci_control   = control.gci_control
+
 local parse = require "src/parser/parse"
-local lunit = require "test/lib/luaunit"
 
-log = mock_am.log
-
-si_variable_write     = mock_am.si_variable_write
-fs2020_variable_write = mock_am.fs2020_variable_write
-fs2020_event          = mock_am.fs2020_event
-fsx_variable_write    = mock_am.sx_variable_write
-fsx_event             = mock_am.sx_event
-xpl_dataref_write     = mock_am.pl_dataref_write
-xpl_command           = mock_am.pl_command
-
-action_map    = responder_model.action_map
-output_map    = responder_model.output_map
-local gci_responder = responder_model.gci_responder
-
-input_map     = control_model.input_map
-local gci_control   = control_model.gci_control
-
-defaults = {
-    
-    simulator = "fs2020",
-    
-    controller = {
-      log = false
-    },
-    
-    control = {
-      log = false
-    },
-    
-    axis = {
-      trigger = "on_change",
-      scale = 1, 
-      invert = false,
-      unit = "DOUBLE",
-      initial = 0.0 
-    },
-    
-    button = {
-      trigger = "on_true",
-      invert = false,
-      unit = "BOOL",
-      initial = false
-    },
-    
-    timed = {
-      trigger = "on_time",
-      delay = 0,
-      period = 250
-    },
-    
-    modal = {
-      trigger = "on_mode1",
-      delay = 500
-    },
-    
-    switched = {
-      trigger = "on_zero"
-    }
-  }
-
--- ===== Model Data =====
-sim = "fs2020"
-gci_control_type = "axis"
-
+---- Model Data
 local log = true
 local index = 0
 local label = "A0"
-local subtype = "axis"
+local basetype = "axis"
+local subtype    = "axis"
 local parameters = nil
 
 local trigger  = "on_change"
@@ -108,7 +57,8 @@ local axis_object = {
 
 local model = gci_control:new( axis_object )
 
--- ==== Test Cases  ====
+-- Test Case Data
+-- Test Case Specifications
 local testcases = {
   succeed = {
     test_obj_max = {
@@ -171,27 +121,27 @@ local testcases = {
   }
 }
 
--- ==== Test Cases  ====
-local function createtest( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs( cases.succeed ) do
     tests[name] = function ()
-      local axis = parse.control( spec ) 
-      lunit.assertNotNil( axis )
-      lunit.assertEquals( axis, model )
+      local axis = parse.control( basetype, spec ) 
+      lu.assertNotNil( axis )
+      lu.assertEquals( axis, model )
     end
   end
   for name, spec in pairs( cases.fail ) do
     tests[name] = function ()
-      local axis = parse.control( spec ) 
-      lunit.assertNil( axis )
+      local axis = parse.control( basetype, spec ) 
+      lu.assertNil( axis )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_Control_Axis = createtest( testcases )
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

@@ -12,7 +12,7 @@ switched-trigger:: "on-plus"  | "on-zero"  | "on-minus"
 modal-trigger   :: "on-mode1" | "on-mode2"
 
 var-spec        :: var-id-name : var_id
-var-id-name     :: "var-id" | "variable" | "dataref" 
+var-id-name     :: "var-id" | "variable" | "dataref" | "event" | "commandref"
 var_id          :: string
 
 unit-spec       :: unit-id-name : unit_id
@@ -27,24 +27,15 @@ force           :: boolean | null
 
 output-spec      :: (see test_output.lua)
 --]]---------------------------------------------------------
-local model = require "src/model/responder"
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local lunit = require "test/lib/luaunit"
 
-action_map          = model.action_map
-output_map          = model.output_map
-local gci_responder = model.gci_responder
-
--- Test Data
-sim    = "fs2020"
-gci_action = "send"
-gci_control_type = "axis"
-
-local event      = "AP_MASTER"
-local commandref = "a/simple/commandref"
-
-local variable   = "RUDDER POSITION"
-local unit       = "Position"
+-- Model Data
+-- Test Case Data
+--local sim    = "fs2020"
+local action = "send"
+local subtype = "axis"
 
 local dataref = "a/simple/dataref"
 local type    = "INT[8]"
@@ -61,37 +52,35 @@ local responder_spec = {
   value   = output_spec
 }
   
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_obj = { on_trigger = responder_spec },
   },
   fails = {
-
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
-      local responder = parse.responder( case.on_trigger )
-      lunit.assertNotNil( responder )
-
+      local responder = parse.responder( subtype, action, case.on_trigger )
+      lu.assertNotNil( responder )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
-      local responder = parse.responder( case.on_trigger )
-      lunit.assertNil( responder )
-
+      local responder = parse.responder( subtype, action, case.on_trigger )
+      lu.assertNil( responder )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseResponder = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

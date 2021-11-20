@@ -1,13 +1,22 @@
 -- ---------------------------------------------------------
--- Test Parse Ignore Specification
+-- Test GCI - Parse Ignore Attribute Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+ignore-attribute :: "ignore" : ignore-value
+ignore-value :: condition
 
-defaults = {}
+condition :: false-condition | true-condition
+false-condition :: false | null
+true-condition :: <any value different from false-condition> 
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
-local tests = {
+-- Model Data
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_true       = { ignore = true },
     test_string     = { ignore = "string" },
@@ -20,26 +29,26 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local ignore = parse.ignore( case.ignore )
-      lunit.assertTrue( ignore )
+      lu.assertTrue( ignore )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local ignore = parse.ignore( case.ignore )
-      lunit.assertNil( ignore )
+      lu.assertNil( ignore )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseIgnore = testcases( tests )
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

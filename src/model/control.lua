@@ -1,5 +1,5 @@
 --{{ 
-  gci_base = require "src/model/base"
+  local gci_base = require "src/model/base"
 --}}
 -- ---------------------------------------------------------
 -- The GCI Control Model

@@ -1,42 +1,45 @@
 -- ---------------------------------------------------------
 -- Test Parse Parameters Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+parameter-list :: parameter-value ( , parameter-list )
+parameter-value :: lua-value
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
+-- Model Data
+-- Test Case Data
 local param = 100
 
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_table    = { parameters = { param } },
     test_item     = { parameters = param },
   },
   fails = {
-    
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local parameters = parse.parameters( case.parameters )
-      lunit.assertNotNil( parameters )
-      lunit.assertEquals( parameters, { param } )
+      lu.assertNotNil( parameters )
+      lu.assertEquals( parameters, { param } )
     end
   end
   for name, case in pairs(cases.fails) do
-    tests[name] = function ()
-      
-    end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseParameters = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

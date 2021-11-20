@@ -28,8 +28,8 @@ function fs2020_variable_write( variable, unit, value )
   spy_variable[variable] = {value, unit}
 end
 
-function fs2020_event( event, value )
-  print(string.format("fs2020_event( '%s', %s )", event, value ))
+function fs2020_event( event, value, value2 )
+  print(string.format("fs2020_event( '%s', %s, %s )", event, value, value2 ))
   spy_variable[event] = {value}
 end
 
@@ -48,9 +48,9 @@ function xpl_dataref_write( dataref, type, value, offset, force )
   spy_variable[dataref] = { value, type, offset, force }
 end
 
-function xpl_command( commandref )
+function xpl_command( commandref, value )
   print(string.format("xpl_command( '%s' )", commandref ))
-  spy_variable[commandref] = {}
+  spy_variable[commandref] = { value }
 end
 
 -- Helper Functions
@@ -67,6 +67,9 @@ function log(type, text)
   spy_message.text = text
 end
 
+local static_data_load = function (_) 
+  return configuration
+end
 
 -- Mock Interface
 -----------------
@@ -82,6 +85,7 @@ return {
   xpl_dataref_write     = xpl_dataref_write,
   xpl_command           = xpl_command,
   -- helper API
+  static_data_load      = static_data_load,
   log = log
 }
   

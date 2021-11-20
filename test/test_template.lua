@@ -1,42 +1,34 @@
 -- ---------------------------------------------------------
 -- Test GCI - <spec>
 -- ---------------------------------------------------------
-
 --[[---------------------------------------------------------
-<spc>
+requirements to test
 --]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
 
-local lunit = require "test/lib/luaunit"
-
--- Test Data
-
-
-
--- Test Cases
-local tests = {
-  succeeds = {
-
+-- Model Data
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
+  succeed = {
   },
-  fails = {
-
+  fail = {
   }
 }
 
-
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
-  for name, spec in pairs(cases.succeeds) do
-    
+  for name, spec in pairs(cases.succeed) do
   end
-  for name, spec in pairs(cases.fails) do
-    
+  for name, spec in pairs(cases.fail) do
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_<spec> = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

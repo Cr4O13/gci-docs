@@ -1,11 +1,21 @@
 --{{ Required Modules
-  controller = require "src/model/controller"
-  control    = require "src/model/control"
-  responder  = require "src/model/responder"
+  local gci        = require "src/gci"
+  local controller = require "src/model/controller"
+  local control    = require "src/model/control"
+  local responder  = require "src/model/responder"
 
-  gci_controller  = controller.gci_controller
-  gci_control     = control.gci_control
-  gci_responder   = responder.gci_responder  
+  local base_types      = gci.base_types
+  local defaults        = gci.defaults
+  local sim             = gci.sim
+  
+  local gci_controller  = controller.gci_controller
+  
+  local gci_control     = control.gci_control
+  local input_map       = control.input_map
+
+  local gci_responder   = responder.gci_responder  
+  local action_map      = responder.action_map
+  local output_map      = responder.output_map
 --}}
 -- ---------------------------------------------------------
 -- The GCI Configuration Parser
@@ -214,12 +224,12 @@
     end
   end
 
-  parse.control = function ( spec )
+  parse.control = function ( base_type, spec )
     if type(spec) == "table" then
       if not spec.ignore then
         local id = parse.id(spec.id)
         
-        local subtype = parse.subtype(spec.subtype or gci_control_type)
+        local subtype = parse.subtype(spec.subtype or base_type)
         
         local action
         if spec.write then action = "write" 
@@ -242,17 +252,15 @@
     end
   end
 
-  parse.controls = function (control_type, spec)
+  parse.controls = function (base_type, spec)
     if type(spec) == "table" then
       local controls = {}
       for _, cspec in ipairs(spec) do
-        gci_control_type = control_type
-        local control = parse.control( cspec )
+        local control = parse.control( base_type, cspec )
         if control then
-          control:log_event("INFO", "added", control_type, control.label )
+          control:log_event("INFO", "added", base_type, control.label )
           controls[control.index] = control
         end
-        gci_control_type = nil
       end
       return controls
     end
@@ -262,9 +270,13 @@
     if not spec.ignore then
       local name = parse.string(spec.name)
       if name then
+        
         local controls = {}
-        controls[0] = parse.controls("axis", spec.axes) or {}
-        controls[1] = parse.controls("button", spec.buttons) or {}
+        for base_type, type_value in pairs(base_types) do
+          controls[type_value] = parse.controls(base_type, spec[base_type]) or {}
+        end
+--        controls[0] = parse.controls("axis", spec.axes) or {}
+--        controls[1] = parse.controls("button", spec.buttons) or {}
         return gci_controller:new{ 
           name = name,
           log = parse.log(spec.log) or defaults.controller.log,

@@ -1,16 +1,17 @@
 -- ---------------------------------------------------------
--- Test Parse Axis Output Response Specification
+-- Test GCI - Parse Axis Output Response Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+axis-output-spec :: { axis-output-field-list }
+axis-output-field-list :: axis-output-field ( , axis-output-field-list )
+axis-output-field :: invert-field | scale-field | response-field
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
-defaults = {
-  axis = {
-    scale = 1
-  }
-}
-
+-- Model Data
+-- Test Case Data
 local response_in = {
   {  1.0, -1.0 },
   {  0.0,  0.0 },
@@ -32,7 +33,8 @@ local response_out = {
   {  1.0, -1.0 }
 }
 
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_ok = { response = response_in     },
     test_ok = { response = response_acceptable }
@@ -48,28 +50,28 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local response = parse.response( case.response )
-      lunit.assertNotNil( response )
-      lunit.assertIsTable( response )
-      lunit.assertEquals( response, response_out )
+      lu.assertNotNil( response )
+      lu.assertIsTable( response )
+      lu.assertEquals( response, response_out )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local response = parse.response( case.response )
-      lunit.assertNil( response )
+      lu.assertNil( response )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseSubtype = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

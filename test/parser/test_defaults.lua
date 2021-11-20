@@ -42,10 +42,11 @@ modal-default-list :: modal-default ( , modal-default-list )
 modal-default :: modal-delay-default
 modal-delay-default :: lua-number
 --]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local lunit = require "test/lib/luaunit"
 
--- Test Data
+-- Model Data
 local value = true
 
 local defaults = {
@@ -54,8 +55,9 @@ local defaults = {
   },
 }
 
--- Test Cases
-local tests = {
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_bool = { section = { attribute = not value } },
   },
@@ -64,30 +66,30 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, spec in pairs(cases.succeeds) do
     tests[name] = function ()
       parse.defaults( defaults, spec )
-      lunit.assertNotNil( defaults )
-      lunit.assertNotNil( defaults.section )
-      lunit.assertNotNil( defaults.section.attribute )
-      lunit.assertEquals( defaults.section.attribute, not value )
+      lu.assertNotNil( defaults )
+      lu.assertNotNil( defaults.section )
+      lu.assertNotNil( defaults.section.attribute )
+      lu.assertEquals( defaults.section.attribute, not value )
     end
   end
   for name, spec in pairs(cases.fails) do
     tests[name] = function ()
       local new_defaults = parse.defaults( defaults, spec )
-      lunit.assertNil( controllers )
+      lu.assertNil( new_defaults )
       
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseController = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

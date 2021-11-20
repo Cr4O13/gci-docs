@@ -1,11 +1,17 @@
 -- ---------------------------------------------------------
--- Test Parse String Types
+-- Test GCI - Parse String Types
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+return nil if not a string, otherwise return the string
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
-local tests = {
+-- Model Data
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_zero  = "",
     test_real  = "string",
@@ -17,27 +23,27 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local string = parse.string( case )
-      lunit.assertNotNil( string )
-      lunit.assertIsString( string )
+      lu.assertNotNil( string )
+      lu.assertIsString( string )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local string = parse.string( case )
-      lunit.assertNil( string )
+      lu.assertNil( string )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseSubtype = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

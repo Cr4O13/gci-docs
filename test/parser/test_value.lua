@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------
--- Test Parse Output Value Specification
+-- Test GCI - Parse Output Value Specification
 -- ---------------------------------------------------------
 --[[---------------------------------------------------------
 fixed-value-spec:: "value" : value
@@ -9,11 +9,14 @@ literal-value   :: number | string | boolean | null
 literal-table   :: table
 global variable :: identifier
 --]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
-local lunit = require "test/lib/luaunit"
 
--- Test Data
-local fixed_values = {
+-- Model Data
+-- Test Case Data
+-- Test Case Specifications
+local testcases = {
   number = {
     test_number = { value = 13.0 },
     test_zero   = { value = 0.00 },
@@ -44,47 +47,47 @@ local fixed_values = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.number) do
     tests[name] = function ()
       local result = parse.value( case.value )
-      lunit.assertNotNil( result )
-      lunit.assertIsNumber( result )
+      lu.assertNotNil( result )
+      lu.assertIsNumber( result )
     end
   end
   for name, case in pairs(cases.string) do
     tests[name] = function ()
       local result = parse.value( case.value )
-      lunit.assertNotNil( result )
-      lunit.assertIsString( result )
+      lu.assertNotNil( result )
+      lu.assertIsString( result )
     end
   end
   for name, case in pairs(cases.boolean) do
     tests[name] = function ()
       local result = parse.value( case.value )
-      lunit.assertNotNil( result )
-      lunit.assertIsBoolean( result )
+      lu.assertNotNil( result )
+      lu.assertIsBoolean( result )
     end
   end
   for name, case in pairs(cases.null) do
     tests[name] = function ()
       local result = parse.value( case.value )
-      lunit.assertNil( result )
+      lu.assertNil( result )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local result = parse.value( case.value )
-      lunit.assertNil( result )
+      lu.assertNil( result )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseOutput = testcases(fixed_values)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

@@ -1,14 +1,22 @@
 -- ---------------------------------------------------------
 -- Test Parse Id Specification
 -- ---------------------------------------------------------
-parse = require "src/parser/parse"
-lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+id-field :: "id" : { "index" : index-value ( , "label" : label-value ) }
+index-value :: lua-number
+label-value :: lua-string
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local parse = require "src/parser/parse"
 
--- Test Data
+-- Model Data
+-- Test Case Data
 local index = 7
 local alias = "Lever 1"
 
-local tests = {
+-- Test Case Specifications
+local testcases = {
   succeeds = {
     test_obj        = { id = { index = index, label = alias } },
     test_obj_index  = { id = { index = index } },
@@ -28,27 +36,27 @@ local tests = {
   }
 }
 
--- Create Test Cases
-local function testcases( cases )
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
       local id = parse.id( case.id )
-      lunit.assertNotNil( id )
-      lunit.assertEquals( id.index, index )
+      lu.assertNotNil( id )
+      lu.assertEquals( id.index, index )
     end
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
       local id = parse.id( case.id )
-      lunit.assertNil( id )
+      lu.assertNil( id )
     end
   end
   return tests
 end
 
--- Test Packages and Cases
-Test_ParseId = testcases(tests)
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()

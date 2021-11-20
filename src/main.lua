@@ -1,5 +1,9 @@
 --{{
-parse = require "src/parser/parse"
+local data = require "src/gci"
+local parse = require "src/parser/parse"
+
+local gci_version = data.gci_version
+
 function gci()
 --}}
 -- ---------------------------------------------------------------------
