@@ -1,55 +1,88 @@
 -- ---------------------------------------------------------
 -- Test GCI Control Model
 -- ---------------------------------------------------------
-local model = require "src/model/control"
-local mock_am = require "test/mock/airmanager"
-local lunit = require "test/lib/luaunit"
+--[[---------------------------------------------------------
+requirements to test
+--]]---------------------------------------------------------
+-- Imports
+local lu = require "test/lib/luaunit"
+local control = require "src/model/control"
+local gci_control = control.gci_control
 
-log = mock_am.log
-local gci_control = model.gci_control
+local airmanager = require "test/mock/airmanager"
 
--- Test Data
-local event = "added"
+-- Model Data
 local input = true
 
 local responders = {}
 responders[input] = nil
 
-local control = { 
+local model = { 
   map = function (input) return input end,
   responders = responders,
   subtype = "Test",
   id = { label = "T0" }  
 }
 
-test_interface = function()
-  lunit.assertNotNil(gci_control)
-  lunit.assertNotNil(gci_control.new)
-  lunit.assertNotNil(gci_control.handle)
-  lunit.assertNotNil(gci_control.handler)
-end
+-- Test Case Data
 
-test_create = function()
-  local test_control = gci_control:new(control)
-  lunit.assertNotNil(test_control)
-  lunit.assertNotNil(test_control.map)
-  lunit.assertNotNil(test_control.responders)
-  lunit.assertNotNil(test_control.subtype)
-  lunit.assertNotNil(test_control.id.label)
-end
+-- Test Case Specifications
+local testcases = {
+  interface = {
+    test_interface = model
+  },
+  create = {
+    test_create = model
+  },
+  maintain = {
+    test_maintain = model
+  },
+  receive = {
+    test_receive = model
+  }
+}
 
-test_maintain = function()
-  local test_control = gci_control:new(control)
-  lunit.assertNotNil(test_control)
-  lunit.assertNotNil(test_control.events)
+-- Create Tests from Test Case Specifications
+local function create_tests( cases )
+  local tests = {}
+  for name, spec in pairs(cases.interface) do
+    tests[name] = function ()
+      lu.assertNotNil(gci_control)
+      lu.assertNotNil(gci_control.new)
+      lu.assertNotNil(gci_control.handle)
+      lu.assertNotNil(gci_control.handler)
+    end
+  end
+  for name, spec in pairs(cases.create) do
+    tests[name] = function ()
+      local test_control = gci_control:new(spec)
+      lu.assertNotNil(test_control)
+      lu.assertNotNil(test_control.map)
+      lu.assertNotNil(test_control.responders)
+      lu.assertNotNil(test_control.subtype)
+      lu.assertNotNil(test_control.id.label)
+    end
+  end
+  for name, spec in pairs(cases.maintain) do
+    tests[name] = function ()
+      local test_control = gci_control:new(spec)
+      lu.assertNotNil(test_control)
+      lu.assertNotNil(test_control.events)
+    end
+  end
+  for name, spec in pairs(cases.receive) do
+    tests[name] = function ()
+      local test_control = gci_control:new(spec)
+      lu.assertNotNil(test_control.handle)
+      test_control:handle(input)
+      lu.assertNotNil(spy_message)
+    end
+  end
+  return tests
 end
-
-test_receive = function()
-  local test_control = gci_control:new(control)
-  lunit.assertNotNil(test_control.handle)
-  test_control:handle(input)
-  lunit.assertNotNil(spy_message)
-end
+  
+-- Test Collection
+Test_All = create_tests( testcases )
 
 -- Test Runner
-lunit.LuaUnit.run()
+lu.LuaUnit.run()
