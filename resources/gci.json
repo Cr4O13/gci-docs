@@ -3,7 +3,7 @@
       "log": false,
       "name": "Saitek X52 Pro Flight Control System",
       
-      "axes": [ 
+      "axis": [ 
         { "ignore": false,
           "log": true,
           "id": { "index" = 0, "label": "JOY Stick Sideways" ], 
@@ -128,7 +128,7 @@
         }
       ],
       
-      "buttons": [ 
+      "button": [ 
 
         { "ignore": true, "id": [  0, "JOY Half Trigger" ] },
         { "ignore": true, "id": [  1, "JOY SAFE Fire"    ] },

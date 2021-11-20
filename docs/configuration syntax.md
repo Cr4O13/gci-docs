@@ -18,7 +18,7 @@ All values of an array must be enclosed in matching brackets `[ ]`. Inside the a
 ## EBNF Form
 The following subsections describe the GCI syntax in the formal EBNF notation. This is given here for creating test cases and proper implementation only.
 
-The EBNF notation defines the canonical form, which is the JSON object style. For some specification objects an array style form is available as well as a simplified form. This is described in the WIKI documentation where applicable.
+The EBNF notation defines the canonical form, which is the JSON object style. For some specification objects an array style form is available and possibly a simplified form. This is described in the WIKI documentation where applicable.
 
 In deviation from standard EBNF rules, all curly braces `{ }`, brackets `[ ]`, colons `:`, quotation marks `" "` and commas `,` used in the EBNF notation below are meant to be entered literally. 
 
@@ -52,8 +52,8 @@ The controller name must be identical to the name Air Manager returns in the API
 controls :: controls-field ( , controls )
 controls-field :: axes-field | buttons-field
 
-axes-field :: "axes" : [ control-list ]
-buttons-field :: "buttons" : [ control-list ]
+axes-field :: "axis" : [ control-list ]
+buttons-field :: "button" : [ control-list ]
 
 control-list :: control-spec ( , control-list )
 control-spec :: { required-control-fields ( optional-control-fields ) }
@@ -65,7 +65,7 @@ optional-control-fields :: optional-control-field ( , optional-control-fields )
 optional-control-field :: subtype-field | action-field | attributes
 ~~~
 
-Ther are two basic types of control: `axis` and `button`. The two types have to be placed in two separate lists objects in the configuration file: `axes` and `buttons`.
+Ther are two basic types of control: `axis` and `button`. The two types have to be placed in two separate sections in the configuration file.
 
 #### Common Fields
 
@@ -121,8 +121,6 @@ subtype-keyword :: "button"
 trigger-keyword :: "on_true" | "on_false"
 ~~~
 
-~~~
-
 #### Keywords for Timed Subtype
 
 A `timed` button is a non-latching push button that repeats an action as long as the button is held pressed. The intial delay time, the repeating period and optionally a limit on the number of actions can be parameterized. Two actions can be specified, one for the repeating action and one for the stop action.
@@ -130,8 +128,6 @@ A `timed` button is a non-latching push button that repeats an action as long as
 ~~~
 subtype-keyword :: "timed"
 trigger-keyword :: "on_time" | "on_stop"
-~~~
-
 ~~~
 
 #### keywords for Modal Subtype

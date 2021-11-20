@@ -5,9 +5,16 @@
 -- The functionality must be configured in the ressources file gci.json
 -- ---------------------------------------------------------------------
 function gci() 
-  
+--{{
+end
+--}}
 -- Local Data
   local gci_version = "4.1 (BETA 10)"
+  
+  local base_types = {
+    axis = 0,
+    button = 1
+  }
 
   local defaults = {
     
@@ -55,5 +62,10 @@ function gci()
   local sim = defaults.simulator
   
 --{{
-end
+  return {
+    gci_version = gci_version,
+    base_types = base_types,
+    defaults = defaults,
+    sim = sim
+  }
 --}}

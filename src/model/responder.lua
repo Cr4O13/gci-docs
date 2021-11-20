@@ -1,5 +1,5 @@
 --{{
-  gci_base = require "src/model/base"
+  local gci_base = require "src/model/base"
 --}}
 -- ---------------------------------------------------------
 -- The GCI Responder Model
@@ -52,8 +52,9 @@
 
   local function xpl_send(self, input)
     local commandref = self.var_id
-    self:log_event("INFO", "xplsend", "xpl_command", commandref )
-    xpl_command( self.var_id )
+    local value      = self:output(input)
+    self:log_event("INFO", "xplsend", "xpl_command", commandref, value )
+    xpl_command( commandref, value )
   end
 
 -- Action Map
@@ -148,16 +149,16 @@
   local gci_responder = gci_base:new {
     events = {
       send     = "responds with %s('%s', '%s')",
-      xplsend  = "responds with %s('%s')",
+      xplsend  = "responds with %s('%s', '%s')",
       write    = "responds with %s('%s', '%s', %s)",
       xplwrite = "responds with %s('%s', '%s', %s, '%s', %s)",
       publish  = "responds with %s('%s', '%s', %s)",
-      missing  = "respond method missing!"
+      missing  = "respond method missing for input = %s!"
     }
   }
   
   function gci_responder:respond(input)
-    self:log_event("INFO", "missing")
+    self:log_event("INFO", "missing", input)
   end
   
   function gci_responder:new (responder)
