@@ -164,33 +164,53 @@
     return output, argument 
   end
   
-  parse.responder = function ( spec )
+  parse.unit_id = function ( spec )
+    return parse.string( spec.unit or spec.type or spec.unit_id )
+  end
+  
+  parse.var_id = function ( spec )
+    return parse.string( spec.variable or spec.dataref or spec.event or spec.commandref or spec.var_id  )  
+  end
+  
+  parse.responder = function ( subtype, action, spec )
     if type(spec) == "table" then
-      local var_id  = parse.string( spec.variable or spec.dataref or spec.var_id )
-      local unit_id = parse.string( spec.unit or spec.type or spec.unit_id )
-      local offset  = parse.number( spec.offset )
-      local force   = parse.boolean( spec.force )
-      local output, value = parse.output( spec.value )
-      output = output or "default"
+      if parse.string(spec[1]) then
+        spec = { var_id = spec[1], unit_id = spec[2], initial = spec[3] }
+      end
+      
+      local output, value = parse.output( spec.output )      
       return gci_responder:new {
-        var_id  = var_id,
-        unit_id = unit_id,
-        offset  = offset,
-        force   = force,
+        var_id  = parse.var_id( spec ),
+        unit_id = parse.unit_id( spec ),
+        offset  = parse.number( spec.offset ),
+        force   = parse.boolean( spec.force ),
+        initial = spec.initial,
         value   = value,
-        respond = action_map[sim][gci_action],
-        output  = output_map[gci_control_type][output]
+        respond = action_map[sim][action],
+        output  = output_map[subtype][output or "default"]
       }
     end
   end
   
-  parse.action = function ( spec )
-    if type(spec) == "table" then
-      local responders = {}
-      for trigger, spec in pairs(spec) do
-        responders[trigger] = parse.responder( spec )
+  parse.action = function ( subtype, action, spec )
+    if spec then
+      if parse.string(spec) then
+        spec = { [ defaults[subtype].trigger ] = spec }
       end
-      return responders
+      
+      if type(spec) == "table" then
+        if parse.string(spec[1]) or parse.var_id( spec ) then
+          spec = { [ defaults[subtype].trigger ] = spec }
+        end
+        
+        local responders = {}
+        for trigger, spec in pairs(spec) do
+          responders[trigger] = parse.responder( subtype, action, spec )
+        end
+        if next(responders) ~= nil then
+          return responders
+        end
+      end
     end
   end
 
@@ -201,11 +221,12 @@
         
         local subtype = parse.subtype(spec.subtype or gci_control_type)
         
-        if spec.write then gci_action = "write" 
-        elseif spec.send then gci_action = "send"
-        elseif spec.publish then gci_action = "publish" 
+        local action
+        if spec.write then action = "write" 
+        elseif spec.send then action = "send"
+        elseif spec.publish then action = "publish" 
         end
-        local responders = parse.action( spec[gci_action] )
+        local responders = parse.action( subtype.name, action, spec[action] )
         if id and responders then
           return gci_control:new {
             index = id.index,

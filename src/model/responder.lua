@@ -121,9 +121,26 @@
     button = {
       default    = output_null,
       direct     = output_direct,
-      scaled     = output_scaled,
-      inverted   = output_inverted_boolean,
-      nonlinear  = output_nonlinear
+      fixed      = output_fixed,
+      inverted   = output_inverted_boolean
+    },
+    timed = {
+      default    = output_null,
+      direct     = output_direct,
+      fixed      = output_fixed,
+      inverted   = output_inverted_boolean
+    },
+    modal = {
+      default    = output_null,
+      direct     = output_direct,
+      fixed      = output_fixed,
+      inverted   = output_inverted_boolean
+    },
+    switched = {
+      default    = output_null,
+      direct     = output_direct,
+      fixed      = output_fixed,
+      inverted   = output_inverted_boolean
     }
   }
 

@@ -24,6 +24,49 @@ local gci_responder = responder_model.gci_responder
 input_map     = control_model.input_map
 local gci_control   = control_model.gci_control
 
+defaults = {
+    
+    simulator = "fs2020",
+    
+    controller = {
+      log = false
+    },
+    
+    control = {
+      log = false
+    },
+    
+    axis = {
+      trigger = "on_change",
+      scale = 1, 
+      invert = false,
+      unit = "DOUBLE",
+      initial = 0.0 
+    },
+    
+    button = {
+      trigger = "on_true",
+      invert = false,
+      unit = "BOOL",
+      initial = false
+    },
+    
+    timed = {
+      trigger = "on_time",
+      delay = 0,
+      period = 250
+    },
+    
+    modal = {
+      trigger = "on_mode1",
+      delay = 500
+    },
+    
+    switched = {
+      trigger = "on_zero"
+    }
+  }
+
 -- ===== Model Data =====
 sim = "fs2020"
 gci_control_type = "axis"
@@ -102,26 +145,26 @@ local testcases = {
         }
       }
     },
---    test_on_change_array_min = {  -- Enhancement #33
---      log = log,
---      id = { index = index, label = label },
---      write = { 
---        on_change = { variable, unit }
---      }
---    },    
---    test_omit_trigger_min = {  -- Enhancement #34
---      log = log,
---      id = { index = index, label = label },
---      write = {
---        variable = variable,
---        unit = unit
---      }
---    },
---    test_omit_trigger_array_min = {  -- Enhancement #34
---      log = log,
---      id = { index = index, label = label },
---      write = { variable, unit }
---    },
+    test_on_change_array_min = {  -- Enhancement #33
+      log = log,
+      id = { index = index, label = label },
+      write = { 
+        on_change = { variable, unit }
+      }
+    },    
+    test_omit_trigger_min = {  -- Enhancement #34
+      log = log,
+      id = { index = index, label = label },
+      write = {
+        variable = variable,
+        unit = unit
+      }
+    },
+    test_omit_trigger_array_min = {  -- Enhancement #34
+      log = log,
+      id = { index = index, label = label },
+      write = { variable, unit }
+    },
   },
   fail = {
 
