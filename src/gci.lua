@@ -22,25 +22,33 @@ function gci()
     },
     
     axis = {
+      trigger = "on_change",
       scale = 1, 
       invert = false,
       unit = "DOUBLE",
       initial = 0.0 
     },
     
-    button = { 
+    button = {
+      trigger = "on_true",
       invert = false,
       unit = "BOOL",
       initial = false
     },
     
-    repeating = {
+    timed = {
+      trigger = "on_time",
       delay = 0,
       period = 250
     },
     
     modal = {
+      trigger = "on_mode1",
       delay = 500
+    },
+    
+    switched = {
+      trigger = "on_zero"
     }
   }
 

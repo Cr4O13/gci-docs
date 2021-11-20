@@ -16,21 +16,18 @@ local gci_responder = model.gci_responder
 -- Test Data
 -- Test Data
 sim    = "fs2020"
-gci_action = "send"
-gci_control_type = "axis"
+action = "send"
+gci_control_type = "button"
 
-
-local responder_list = { 
-  on_true = {},
-  on_false = {}
-}
-
-local test_spec = {}
-test_spec[gci_action] = responder_list
 
 local tests = {
   succeeds = {
-    test_send = test_spec
+    test_send = { 
+      send = { 
+        on_true = { event = "EVENT" },
+        on_false = { event = "EVENT" }
+      }
+    }
   },
   fails = {
     test_empty      = { send = {}          },
@@ -44,7 +41,7 @@ local function testcases( cases )
   local tests = {}
   for name, case in pairs(cases.succeeds) do
     tests[name] = function ()
-      local responders = parse.action( case.write or case.send or case.publish )
+      local responders = parse.action( gci_control_type, action, case.send )
       lunit.assertNotNil( responders )
       lunit.assertNotNil( responders.on_true )
       lunit.assertNotNil( responders.on_false )
@@ -52,9 +49,8 @@ local function testcases( cases )
   end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
-      local responders = parse.action( case.write or case.send or case.publish )
-      lunit.assertNotNil( responders )
-      lunit.assertEquals( responders, {} )
+      local responders = parse.action( "button", "send", case.send )
+      lunit.assertNil( responders )
     end
   end
   return tests
