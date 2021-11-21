@@ -91,11 +91,11 @@
   end  
   
   local function output_nonlinear(self, input) 
-    return interpolate_linear(self.value, input, true)
+    return interpolate_linear(self.settings, input, true)
   end
 
   local function output_scaled(self, input) 
-    return input * self.value
+    return input * self.scale
   end
   
   local function output_inverted_boolean(self, input) 
