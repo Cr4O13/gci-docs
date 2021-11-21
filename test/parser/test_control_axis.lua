@@ -21,7 +21,7 @@ local parse = require "src/parser/parse"
 ---- Model Data
 local log = true
 local index = 0
-local label = "A0"
+local label = "0"
 local basetype = "axis"
 local subtype    = "axis"
 local parameters = nil
@@ -69,15 +69,15 @@ local testcases = {
         on_change = {
           variable = variable,
           unit = unit,
+          output = "input",
           offset = nil,
-          force = nil,
-          output = "input"
+          force = nil
         }
       }
     },
-    test_obj_min = {
+    test_obj = {
       log = log,
-      id = { index = index, label = label },
+      id = { index = index },
       write = { 
         on_change = {
           variable = variable,
@@ -85,34 +85,24 @@ local testcases = {
         }
       }
     },
-    test_id_array_min = {
+    test_array = {  -- Enhancement #33
       log = log,
-      id = { index, label },
-      write = { 
-        on_change = {
-          variable = variable,
-          unit = unit
-        }
-      }
-    },
-    test_on_change_array_min = {  -- Enhancement #33
-      log = log,
-      id = { index = index, label = label },
+      id = index,
       write = { 
         on_change = { variable, unit }
       }
     },    
-    test_omit_trigger_min = {  -- Enhancement #34
+    test_omit_trigger_obj = {  -- Enhancement #34
       log = log,
-      id = { index = index, label = label },
+      id = { index = index },
       write = {
         variable = variable,
         unit = unit
       }
     },
-    test_omit_trigger_array_min = {  -- Enhancement #34
+    test_omit_trigger_array = {  -- Enhancement #34
       log = log,
-      id = { index = index, label = label },
+      id = index,
       write = { variable, unit }
     },
   },
