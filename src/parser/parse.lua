@@ -147,7 +147,7 @@
       end
     end
 
-    local output, argument
+    local output = {}
     if type(spec) == "table" then
       local invert   = parse.boolean(spec.invert)
       local scale    = parse.scale(spec.scale, invert)
@@ -155,23 +155,21 @@
       local value    = parse.value(spec.value)
       
       if value then
-        output = "fixed"; 
-        argument = value
+        output.option = "fixed"
+        output.value = value
       elseif response then
-        output = "nonlinear"; 
-        argument = response
+        output.option = "nonlinear"
+        output.settings = response
       elseif scale then
-        output = "scaled"; 
-        argument = scale
+        output.option = "scaled"
+        output.scale = scale
       elseif invert == true then
-        output = "inverted"; 
-        argument = nil
+        output.option = "inverted"
       elseif invert == false then
-        output = "direct"; 
-        argument = nil
+        output.option = "direct"
       end
     end
-    return output, argument 
+    return output 
   end
   
   parse.unit_id = function ( spec )
@@ -184,20 +182,28 @@
   
   parse.responder = function ( subtype, action, spec )
     if type(spec) == "table" then
-      if parse.string(spec[1]) then
-        spec = { var_id = spec[1], unit_id = spec[2], initial = spec[3] }
+      if parse.string(spec[1]) then -- array notation
+        if action == "send" then
+          spec = { var_id = spec[1], output = spec[2], value2 = spec[3] }
+        elseif action == "write" then
+          spec = { var_id = spec[1], unit_id = spec[2], output = spec[3], offset = spec[4], force = spec[5]  }
+        elseif action == "publish" then
+          spec = { var_id = spec[1], unit_id = spec[2], initial = spec[3], output = spec[4] }
+        end
       end
       
-      local output, value = parse.output( spec.output )      
+      local output = parse.output( spec.output )      
       return gci_responder:new {
-        var_id  = parse.var_id( spec ),
-        unit_id = parse.unit_id( spec ),
-        offset  = parse.number( spec.offset ),
-        force   = parse.boolean( spec.force ),
-        initial = spec.initial,
-        value   = value,
-        respond = action_map[sim][action],
-        output  = output_map[subtype][output or "default"]
+        var_id   = parse.var_id( spec ),
+        unit_id  = parse.unit_id( spec ),
+        offset   = parse.number( spec.offset ),
+        force    = parse.boolean( spec.force ),
+        initial  = spec.initial,
+        value    = output.value,
+        scale    = output.scale,
+        settings = output.settings, 
+        respond  = action_map[sim][action],
+        output   = output_map[subtype][output.option or "default"]
       }
     end
   end
