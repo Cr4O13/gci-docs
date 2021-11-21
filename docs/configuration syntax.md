@@ -3,7 +3,7 @@ This specifies the syntax for the GCI configuration file
 
 ## JSON-Syntax
 
-The specification file uses the JSON syntax. JSON is quite finnicky about missing or wrong delimiting characters like braces, brackets, commas, colons and quotation marks.
+The specification file uses the JSON syntax. JSON is quite finnicky about missing or wrong delimiting characters like braces, brackets, commas, colons, and quotation marks.
 
 All identifiers need to be enclosed in matching quotation marks `" "`. 
 
@@ -22,11 +22,11 @@ The EBNF notation defines the canonical form, which is the JSON object style. Fo
 
 In deviation from standard EBNF rules, all curly braces `{ }`, brackets `[ ]`, colons `:`, quotation marks `" "` and commas `,` used in the EBNF notation below are meant to be entered literally. 
 
-The double colon `::` an the parentheses `( )` retain their meaning in EBNF. They are not meant to be entered literrally.
+The double colon `::` and the parentheses `( )` retain their meaning in EBNF. They are not meant to be entered literally.
 
 ### GCI Configuration
 
-This is the top level entry of the formal notation
+This is the top-level entry of the formal notation
 
 ~~~
 gci-configuration :: { configuration-spec }
@@ -44,7 +44,7 @@ controller-name-field :: "name" : controller-name
 controller-name :: lua-string
 ~~~
 
-The controller name must be identical to the name Air Manager returns in the API function `game_controller_list`. This name should be identical to the name displayed by the Windows 'Game Controller' control panel (joy.cpl).
+The controller's name must be identical to the name Air Manager returns in the API function `game_controller_list`. This name should be identical to the name displayed by the Windows 'Game Controller' control panel (joy.cpl).
 
 ### Controls
 
@@ -59,7 +59,7 @@ control-list :: control-spec ( , control-list )
 control-spec :: { id-field , action-field ( , subtype-field ) ( , attributes ) }
 ~~~
 
-Ther are two basic types of control: `axis` and `button`. The two types have to be placed in two separate sections in the configuration file.
+There are two basic types of control: `axis` and `button`. A control specification must be placed in the corresponding section in the configuration file.
 
 #### Control Identification
 
@@ -94,7 +94,7 @@ parameter-list :: parameter-value ( , parameter-list )
 parameter-value :: lua-value
 ~~~
 
-The `subtype-keyword` is specific to a control subtypes (see below for the different subtypes.)
+The `subtype-keyword` is specific to a control subtype (see below for the different subtypes.)
 
 ##### Keywords for Axis Subtype
 
@@ -107,7 +107,7 @@ trigger-keyword :: "on_change"
 
 ##### Keywords for Switched Subtype
 
-The 'switched' subtype is used for axis inputs that have 3 states. The states are represnted by the input values `-1.0`, `0.0` and `+1.0`. This is sometimes the case for some POV multiway switches. Two actions can be specified, one for each state. The corrsponding action is executed when the state changes.
+The `switched` subtype is used for axis inputs that have 3 states. The states are represented by the input values `-1.0`, `0.0` and `+1.0`. This is sometimes the case for some POV multiway switches. Two actions can be specified, one for each state. The corresponding action is executed when the state changes.
 
 ~~~
 subtype-keyword :: "switched
@@ -125,7 +125,7 @@ trigger-keyword :: "on_true" | "on_false"
 
 ##### Keywords for Timed Subtype
 
-A `timed` button is a non-latching push button that repeats an action as long as the button is held pressed. The intial delay time, the repeating period and optionally a limit on the number of actions can be parameterized. Two actions can be specified, one for the repeating action and one for the stop action.
+A `timed` button is a non-latching push button that repeats an action if the button is held pressed. The initial delay time, the repeating period and optionally a limit on the number of actions can be parameterized. Two actions can be specified, one for the repeating action and one for the stop action.
 
 ~~~
 subtype-keyword :: "timed"
@@ -134,7 +134,7 @@ trigger-keyword :: "on_time" | "on_stop"
 
 ##### Keywords for Modal Subtype
 
-A `modal` button is a non-latching push button that behaves differerently depending on how much time the button is held pressed, The delay time for switching from mode 1 to mode 2 can be parameterized. Two actions can be specified, one for mode 1 and one for mode 2. The action is executed on release of the button.
+A `modal` button is a non-latching push button that behaves differently depending on how much time the button is held pressed. The delay time for switching from mode 1 to mode 2 can be parameterized. Two actions can be specified, one for mode 1 and one for mode 2. The action is executed on release of the button.
 
 ~~~
 subtype-keyword :: "modal"
@@ -147,7 +147,7 @@ The responder is the specification object that defines the action content. The r
 
 #### Variable identifier
 
-The API functions for the differernt simulators use specific identifiers for similar data references. GCI uses a generalized identifier, but the specific identifiers can be used as alias.
+The API functions for the different simulators use specific identifiers for similar data references. GCI uses a generalized identifier, but the specific identifiers can be used as alias.
 
 ~~~
 var-id-field :: var-id-keyword : var-name
@@ -158,7 +158,7 @@ var-name :: lua-string
 
 #### Variable identifier
 
-The API functions for the differernt simulators use specific identifiers for similar data units. GCI uses a generalized identifier, but the specific identifiers can be used as alias.
+The API functions for the different simulators use specific identifiers for similar data units. GCI uses a generalized identifier, but the specific identifiers can be used as alias.
 
 ~~~
 unit-id-field :: unit-id-keyword : unit-name
@@ -192,7 +192,7 @@ force-value :: lua-boolean
 
 The Output Specification defines the output value for the action. 
 
-Axes and buttons uses a slightly different set of output options.
+Axes and buttons use a slightly different set of output options.
 
 ~~~
 output-field :: output-spec
@@ -205,7 +205,7 @@ An axis type control can produce
 - direct output of the input value
 - an inverted output
 - a scaled output
-- non linear output responses
+- a nonlinear output response
 - a combination of the above rules
 
 ~~~
@@ -234,7 +234,7 @@ output-value :: lua-number
 #### Button Output
 
 A button type control can produce 
-- no output value
+- no output-value
 - direct output of the input value
 - an inverted output
 - a fixed value
@@ -387,7 +387,7 @@ true-condition :: <any value different from false-condition>
 
 ## Additional Rules
 
-The same field must not occure more than once in the same object. Any previously field value will be overrwritten with the new field value if double fields occure. As the order of loading the JSON file is not determined, the resulting configuration object may be inconsistent.
+The same field must not occur more than once in the same object. Any previously field value will be overwritten with the new field value if double fields occur. As the order of loading the JSON file is not determined, the resulting configuration object may be inconsistent.
 
 ## File Requirements
 
