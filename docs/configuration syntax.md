@@ -61,7 +61,7 @@ control-spec :: { id-field , action-field ( , subtype-field ) ( , attributes ) }
 
 Ther are two basic types of control: `axis` and `button`. The two types have to be placed in two separate sections in the configuration file.
 
-#### Control identification
+#### Control Identification
 
 ~~~
 id-field :: "id" : { "index" : index-value ( , "label" : label-value ) }
@@ -75,7 +75,7 @@ label-value :: lua-string
 action-field :: action-keyword : { responder-list }
 action-keyword :: "write" | "send" | "publish"
 
-responder-list :: responder-spec ( , responders-list )
+responder-list :: responder-spec ( , responder-list )
 responder-spec :: trigger-keyword : { responder-field-list }
 
 responder-field-list :: responder-field (, responder-field-list )
@@ -92,7 +92,7 @@ subtype-keyword :: subtype-keyword
 
 parameter-list :: parameter-value ( , parameter-list )
 parameter-value :: lua-value
-~~
+~~~
 
 The `subtype-keyword` is specific to a control subtypes (see below for the different subtypes.)
 
