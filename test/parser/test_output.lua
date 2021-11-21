@@ -32,6 +32,12 @@ local lu = require "test/lib/luaunit"
 local parse = require "src/parser/parse"
 
 -- Model Data
+local settings = {
+  { -1.0,  1.0 },
+  {  0.0,  0.0 },
+  {  1.0, -1.0 }
+}
+
 -- Test Case Data
 local response_settings = {
   {  1.0, -1.0 },
@@ -79,45 +85,59 @@ local function create_tests( cases )
     tests[name] = function ()
       local output = parse.output( case.output )
       lu.assertNotNil( output )
-      lu.assertIsString( output )
-      lu.assertEquals( output, "direct" )
+      lu.assertEquals( output.option, "direct" )
+      lu.assertNil( output.scale )
+      lu.assertNil( output.setting )
+      lu.assertNil( output.value )
     end
   end
   for name, case in pairs(cases.inverted) do
     tests[name] = function ()
       local output = parse.output( case.output )
       lu.assertNotNil( output )
-      lu.assertIsString( output )
-      lu.assertEquals( output, "inverted" )
+      lu.assertEquals( output.option, "inverted" )
+      lu.assertNil( output.scale )
+      lu.assertNil( output.setting )
+      lu.assertNil( output.value )
     end
   end
-  for name, case in pairs(cases.none) do
-    tests[name] = function ()
-      local output = parse.output( case.output )
-      lu.assertNil( output )
-    end
-  end  for name, case in pairs(cases.scaled) do
+  for name, case in pairs(cases.scaled) do
     tests[name] = function ()
       local output = parse.output( case.output )
       lu.assertNotNil( output )
-      lu.assertIsString( output )
-      lu.assertEquals( output, "scaled" )
+      lu.assertEquals( output.option, "scaled" )
+      lu.assertEquals( output.scale, scale )
+      lu.assertNil( output.setting )
+      lu.assertNil( output.value )
     end
   end
   for name, case in pairs(cases.fixed) do
     tests[name] = function ()
       local output = parse.output( case.output )
       lu.assertNotNil( output )
-      lu.assertIsString( output )
-      lu.assertEquals( output, "fixed" )
+      lu.assertEquals( output.option, "fixed" )
+      lu.assertEquals( output.value, val )
+      lu.assertNil( output.scale )
+      lu.assertNil( output.setting )
     end
   end
     for name, case in pairs(cases.non_linear) do
     tests[name] = function ()
       local output = parse.output( case.output )
       lu.assertNotNil( output )
-      lu.assertIsString( output )
-      lu.assertEquals( output, "nonlinear" )
+      lu.assertEquals( output.option, "nonlinear" )
+      lu.assertEquals( output.settings, settings )
+      lu.assertNil( output.scale )
+      lu.assertNil( output.value )
+    end
+  end
+  for name, case in pairs(cases.none) do
+    tests[name] = function ()
+      local output = parse.output( case.output )
+      lu.assertNil( output.option )
+      lu.assertNil( output.scale )
+      lu.assertNil( output.setting )
+      lu.assertNil( output.value )
     end
   end
   return tests
