@@ -235,24 +235,34 @@
       if not spec.ignore then
         local id = parse.id(spec.id)
         
-        local subtype = parse.subtype(spec.subtype or base_type)
-        
-        local action
-        if spec.write then action = "write" 
-        elseif spec.send then action = "send"
-        elseif spec.publish then action = "publish" 
-        end
-        local responders = parse.action( subtype.name, action, spec[action] )
-        if id and responders then
-          return gci_control:new {
-            index = id.index,
-            label = id.label,
-            log = parse.log(spec.log) or defaults.control.log,
-            subtype = subtype.name,
-            map = input_map[subtype.name],
-            parameters = subtype.parameters,
-            responders = responders
-          }
+        if id then
+          local subtype = parse.subtype(spec.subtype or base_type)
+          
+          if subtype then
+            local action
+            if spec.publish then   action = "publish" 
+            elseif spec.write then action = "write" 
+            elseif spec.send then  action = "send"
+            end
+            
+            if action then
+              local responders = parse.action( subtype.name, action, spec[action] )
+              
+              if responders then
+                local control = {
+                  log = parse.log(spec.log) or defaults.control.log,
+                  index      = id.index,
+                  label      = id.label,
+                  subtype    = subtype.name,
+                  parameters = subtype.parameters,
+                  map        = input_map[subtype.name],
+                  responders = responders
+                }
+                
+                return gci_control:new( control ) 
+              end
+            end
+          end
         end
       end
     end
