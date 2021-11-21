@@ -181,6 +181,10 @@
   end
   
   parse.responder = function ( subtype, action, spec )
+    if type(spec) == "string" then -- simple notation
+      spec = { var_id = spec }
+    end
+    
     if type(spec) == "table" then
       if parse.string(spec[1]) then -- array notation
         if action == "send" then
