@@ -13,18 +13,15 @@ local lu = require "test/lib/luaunit"
 -- Model Data
 
 -- Test Case Data
-local responder_list = { "EVENT" }
+local responder_list = { on_true = { event = "EVENT" } }
 
 -- Test Case Specifications
 local testcases = {
   writes = {
-    test_write    = { write   = responder_list },
+    test_write    = { write   = { on_change = { variable = "VARIABLE", unit = "UNIT" } } },
   },
   sends = {
-    test_send     = { send    = responder_list },
-  },
-  publishes = {
-    test_publish  = { publish = responder_list },
+    test_send     = { send    = { on_change = { event = "EVENT" } } },
   },
   fails = {
     test_null       = { },
@@ -32,6 +29,7 @@ local testcases = {
     test_number     = { send = 8           },
     test_empty      = { publish = "it"     },
     test_obj_alias  = { action = { }       },
+    test_publish    = { publish = { on_change = { variable = "VARIABLE", unit = "UNIT", initial = 0.0 } } },
   }
 }
 
@@ -52,16 +50,9 @@ local function create_tests( cases )
       lu.assertNotNil( responders.on_change)
     end
   end
-  for name, case in pairs(cases.publishes) do
-    tests[name] = function ()
-      local responders = parse.action( "axis", "publish", case.publish )
-      lu.assertNotNil( responders )
-      lu.assertNotNil( responders.on_change)
-    end
-  end
   for name, case in pairs(cases.fails) do
     tests[name] = function ()
-      local responders = parse.action( "axis", "write", case.write or case.send or case.publish )
+      local responders = parse.action( "axis", "write", case.write or case.send )
       lu.assertNil( responders )
 
     end

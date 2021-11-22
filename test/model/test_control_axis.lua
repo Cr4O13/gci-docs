@@ -27,7 +27,7 @@ local subtype  = "axis"
 local index    = 0
 local label    = "A0"
 local action   = "write"
-
+local trigger  = "on_change"
 local variable = "RUDDER POSITION"
 local unit     = "Position"
 
@@ -43,7 +43,7 @@ local axis_responder = {
 }
 
 local responders = {}
-responders[ defaults[subtype].trigger ] = gci_responder:new(axis_responder)
+responders[ trigger ] = gci_responder:new(axis_responder)
   
 local model = {
   log = true,

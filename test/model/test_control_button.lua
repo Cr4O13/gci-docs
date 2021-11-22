@@ -26,7 +26,7 @@ local sim      = "fs2020"
 local subtype  = "button"
 local index    = 0
 local label    = "B0"
-
+local trigger  = "on_true"
 local action   = "send"
 local event    = "AP_MASTER"
 local output   = "default"
@@ -39,7 +39,7 @@ local button_responder = {
 }
 
 local responders = {}
-responders[ defaults[subtype].trigger ]  = gci_responder:new(button_responder)
+responders[ trigger ]  = gci_responder:new(button_responder)
 
   
 local model = {

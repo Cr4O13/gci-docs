@@ -45,7 +45,7 @@
     
 -- Test: OK
   parse.ignore = function (spec)
-    if spec then 
+    if spec or defaults.ignore then 
       return true 
     end
   end
@@ -132,9 +132,9 @@
   end
   
   parse.responder = function ( subtype, action, spec )
-    if type(spec) == "string" then -- simple notation
-      spec = { var_id = spec }
-    end
+--    if type(spec) == "string" then -- simple notation
+--      spec = { var_id = spec }
+--    end
     
     if type(spec) == "table" then
       local output = parse.output( spec.output )      
@@ -153,7 +153,7 @@
   end
   
   parse.action = function ( subtype, action, spec )
-    if spec then
+    if type(spec) == "table" then
       local responders = {}
       for trigger, spec in pairs(spec) do
         responders[trigger] = parse.responder( subtype, action, spec )

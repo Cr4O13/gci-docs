@@ -21,7 +21,8 @@ local model = {
   map = function (input) return input end,
   responders = responders,
   subtype = "Test",
-  id = { label = "T0" }  
+  index = 0,
+  label = "T0"
 }
 
 -- Test Case Data
@@ -60,7 +61,7 @@ local function create_tests( cases )
       lu.assertNotNil(test_control.map)
       lu.assertNotNil(test_control.responders)
       lu.assertNotNil(test_control.subtype)
-      lu.assertNotNil(test_control.id.label)
+      lu.assertNotNil(test_control.label)
     end
   end
   for name, spec in pairs(cases.maintain) do
