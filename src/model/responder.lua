@@ -4,12 +4,6 @@
 -- ---------------------------------------------------------
 -- The GCI Responder Model
 -- ---------------------------------------------------------
-
--- Respond functions 
-  local function si_publish(self, input)
-    si_variable_write( self.var_id, self:output(input) )
-  end
-
   local function fs2020_write(self, input)
     local variable = self.var_id
     local unit = self.unit_id
@@ -60,22 +54,18 @@
 -- Action Map
   local action_map = {
     fs2020 = {
-      publish   = si_publish,
       write     = fs2020_write,
       send      = fs2020_send
     },
     fsx  = {
-      publish   = si_publish,
       write     = fsx_write,
       send      = fsx_send
     },
     p3d  = {
-      publish   = si_publish,
       write     = fsx_write,
       send      = fsx_send
     },
     xpl  = {
-      publish   = si_publish,
       write     = xpl_write,
       send      = xpl_send
     }
@@ -90,10 +80,6 @@
     return self.value
   end  
   
-  local function output_nonlinear(self, input) 
-    return interpolate_linear(self.settings, input, true)
-  end
-
   local function output_scaled(self, input) 
     return input * self.scale
   end
@@ -116,28 +102,9 @@
       default    = output_direct,
       direct     = output_direct,
       scaled     = output_scaled,
-      inverted   = output_inverted_numeric,
-      nonlinear  = output_nonlinear
+      inverted   = output_inverted_numeric
     },
     button = {
-      default    = output_null,
-      direct     = output_direct,
-      fixed      = output_fixed,
-      inverted   = output_inverted_boolean
-    },
-    timed = {
-      default    = output_null,
-      direct     = output_direct,
-      fixed      = output_fixed,
-      inverted   = output_inverted_boolean
-    },
-    modal = {
-      default    = output_null,
-      direct     = output_direct,
-      fixed      = output_fixed,
-      inverted   = output_inverted_boolean
-    },
-    switched = {
       default    = output_null,
       direct     = output_direct,
       fixed      = output_fixed,
@@ -152,7 +119,6 @@
       xplsend  = "responds with %s('%s', '%s')",
       write    = "responds with %s('%s', '%s', %s)",
       xplwrite = "responds with %s('%s', '%s', %s, '%s', %s)",
-      publish  = "responds with %s('%s', '%s', %s)",
       missing  = "respond method missing for input = %s!"
     }
   }

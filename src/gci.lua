@@ -1,6 +1,10 @@
 -- ---------------------------------------------------------------------
 -- Game Controller Integration 
 -- ---------------------------------------------------------------------
+-- Copyright (C) 2021 Paul Hoesli. <tetrachromat at outlook dot com>.
+-- Everyone is permitted to use, copy, change and distribute copies
+-- of this software version, according to the GPLv3 license terms.
+-- ---------------------------------------------------------------------
 -- This code integrates game controllers into Air Manager / Air Player
 -- The functionality must be configured in the ressources file gci.json
 -- ---------------------------------------------------------------------
@@ -9,7 +13,7 @@ function gci()
 end
 --}}
 -- Local Data
-  local gci_version = "4.1.0 (BETA 22)"
+  local gci_version = "4.1.0 Lite (BETA 22)"
   
   local base_types = {
     axis = 0,
@@ -29,7 +33,6 @@ end
     },
     
     axis = {
-      trigger = "on_change",
       scale = 1, 
       invert = false,
       unit = "DOUBLE",
@@ -37,25 +40,9 @@ end
     },
     
     button = {
-      trigger = "on_true",
       invert = false,
       unit = "BOOL",
       initial = false
-    },
-    
-    timed = {
-      trigger = "on_time",
-      delay = 0,
-      period = 250
-    },
-    
-    modal = {
-      trigger = "on_mode1",
-      delay = 500
-    },
-    
-    switched = {
-      trigger = "on_zero"
     }
   }
 

@@ -15,34 +15,6 @@
       elseif input == false then
         return "on_false"
       end
-    end,
-    
-    timed = function (self, input) 
-      if input == true then
-        return "on_time"
-      elseif input == false then
-        return "on_stop"
-      end
-    end,
-    
-    modal = function (self, input)
-      if input == false then
-        if self.mode2 then
-          return "on_mode2"
-        else
-          return "on_mode1"
-        end
-      end
-    end,
-    
-    switched = function (self, input)
-      if input < 0.0 then
-        return "on_minus" 
-      elseif input > 0.0 then
-        return "on_plus"
-      elseif input == 0.0 then
-        return "on_zero"
-      end
     end
   }
 
