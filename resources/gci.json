@@ -4,210 +4,102 @@
       "name": "Saitek X52 Pro Flight Control System",
       
       "axis": [ 
-        { "ignore": false,
-          "id": { "index": 0, "label": "JOY Stick Sideways" ], 
-          "subtype": "axis",
+        { "id": { "index": 0, "label": "JOY Stick Sideways" }, 
           "write": {
             "on_change": {
               "variable": "AILERON POSITION",
               "unit": "Position", 
-              "output": {
-                "invert": false
-                "scale": 1,
-                "response": [				
-                  [ -1.000, -1.000 ], 
-                  [ -0.924, -0.836 ], 
-                  [ -0.838, -0.687 ], 
-                  [ -0.740, -0.552 ], 
-                  [ -0.629, -0.429 ], 
-                  [ -0.501, -0.314 ], 
-                  [ -0.355, -0.206 ], 
-                  [ -0.189, -0.102 ], 
-                  [  0.000,  0.000 ], 
-                  [  0.189,  0.102 ], 
-                  [  0.355,  0.206 ], 
-                  [  0.501,  0.314 ], 
-                  [  0.629,  0.429 ], 
-                  [  0.740,  0.552 ], 
-                  [  0.838,  0.687 ], 
-                  [  0.924,  0.836 ], 
-                  [  1.000,  1.000 ]
-                ]
-              }
+              "output": { "invert": false, "scale": 1 }
             }
           }  
         },
         
-        { "id": [ 1, "JOY Stick Pull" ],
-          "write": [ "ELEVATOR POSITION", "Position", 
-            { "response": [				
-                [ -1.000, -1.000 ], 
-                [ -0.924, -0.836 ], 
-                [ -0.838, -0.687 ], 
-                [ -0.740, -0.552 ], 
-                [ -0.629, -0.429 ], 
-                [ -0.501, -0.314 ], 
-                [ -0.355, -0.206 ], 
-                [ -0.189, -0.102 ], 
-                [  0.000,  0.000 ], 
-                [  0.189,  0.102 ], 
-                [  0.355,  0.206 ], 
-                [  0.501,  0.314 ], 
-                [  0.629,  0.429 ], 
-                [  0.740,  0.552 ], 
-                [  0.838,  0.687 ], 
-                [  0.924,  0.836 ], 
-                [  1.000,  1.000 ]
-              ]
+        { "id": { "index": 1, "label": "JOY Stick Pull" },
+          "write": {
+            "on_change": { 
+              "variable": "ELEVATOR POSITION",
+              "unit": "Position"
             }
-          ]
-        },
-        
-        { "id": [ 2, "TQ Throttle Lever" ], 
-          "write": [ "GENERAL ENG THROTTLE LEVER POSITION:1", "PERCENT",
-            { "scale": 100,
-              "response": [				
-                [ -1.000, 1.000	], 
-                [  1.000, 0.000	]
-              ]
-            }
-          ]
-        },
-        
-        { "id": [ 3, "JYO Stick Rotate" ],
-          "write": [ "RUDDER POSITION", "POSITION" ]
-        },
-        
-        { "id": [ 4, "TQ Slider" ], 
-          "write": [ "GENERAL ENG PROPELLER LEVER POSITION:1", "PERCENT",
-            { "scale": 100,
-              "response": [				
-                [ -1.000, 	0.000	], 
-                [  1.000, 	1.000	]
-              ]
-            }
-          ]
-        },
-        
-        { "id": [ 5, "TQ Small Knob" ], 
-          "write": [ "GENERAL ENG MIXTURE LEVER POSITION:1", "PERCENT",
-            { "scale": 100,
-              "response": [				
-                [ -1.000, 	0.000	], 
-                [  1.000, 	1.000	]
-              ]
-            }
-          ]
-        },
-        
-        { "log": true,
-          "id": [ 6, "JOY POV left-right" ],
-          "subtype": "switched", 
-          "send": { 
-            "on_plus":  "VIEW_LEFT", 
-            "on_minus": "VIEW_RIGHT", 
-            "on_zero":  "VIEW_RESET" 
           }
         },
         
-        { "log": false,
-          "id": [ 7, "JOY POV up-down" ],   
-          "publish": [ "gci/x52/pov/updwn", "DOUBLE", 0.0 ]
-        }
+        { "id": { "index": 2, "label": "TQ Throttle Lever" }, 
+          "write": {
+            "on_change": { 
+              "variable": "GENERAL ENG THROTTLE LEVER POSITION:1",
+              "unit": "PERCENT",
+              "output": { "scale": 100 }
+            }
+          }
+        },
+        
+        { "id": { "index": 3, "label": "JYO Stick Rotate" },
+          "write": {
+            "on_change": { "variable": "RUDDER POSITION", "unit": "POSITION" }
+          }
+        },
+        
+        { "id": { "index": 4, "label": "TQ Slider" }, 
+          "write": {
+            "on_change": { 
+              "variable":  "GENERAL ENG PROPELLER LEVER POSITION:1", 
+              "unit": "PERCENT",
+              "output": { "scale": 100 }
+            }
+          }
+        },
+        
+        { "id": { "index": 5, "label": "TQ Small Knob" }, 
+          "write": {
+            "on_change": { 
+              "variable":  "GENERAL ENG MIXTURE LEVER POSITION:1", 
+              "unit": "PERCENT",
+              "output": { "scale": 100 }
+            }
+          }
+        },
       ],
       
       "button": [ 
 
         { "log": false,
-          "subtype": "button", 
-          "id": [  8, "JOY Switch T1" ],
-          "send": "GEAR_TOGGLE" 
-        },
-        
-        { "log": false,
-          "id": [  9, "JOY Switch T2" ], 
+          "id": { "index": 8, "label": "JOY Switch T1" },
           "send": {
-            "on_true":  [ "GEAR_SET", 0 , "equals Up"   ],
-            "on_false": [ "GEAR_SET", 1 , "equals down" ]
+            "on_true": { "event": "GEAR_TOGGLE" }
+          }
+        },
+        
+        { "log": false,
+          "id": { "index": 9, "label": "JOY Switch T2" }, 
+          "send": {
+            "on_true":  { "event": "GEAR_SET", "output": { "value": 0 } },
+            "on_false": { "event": "GEAR_SET", "output": { "value": 1 } }
           }
         },
           
         { "log": false,
-          "id": [ 10, "JOY Switch T3" ],
+          "id": { "index": 10, "label": "JOY Switch T3" },
           "send": { 
-            "on_true":  "GEAR_UP", 
-            "on_false": "GEAR_DOWN"
+            "on_true":  { "event": "GEAR_UP" }
+            "on_false": { "event": "GEAR_DOWN" }
           }
         },
           
         { "log": false,
-          "id": [ 11, "JOY Switch T4" ], 
+          "id": { "index": 11, "label": "JOY Switch T4" }, 
           "write": {
-            "on_true":  [ "GEAR HANDLE POSITION", "Position", 0 ],
-            "on_false": [ "GEAR HANDLE POSITION", "Position", 1 ]
+            "on_true":  { 
+              "variable": "GEAR HANDLE POSITION", 
+              "unit": "Position", 
+              "output": { "value": 0 } 
+            },
+            "on_false": { 
+              "variable": "GEAR HANDLE POSITION", 
+              "unit": "Position", 
+              "output": { "value": 1 } 
+            }
           }
-        },
-        
-        { "log": false, 
-          "id": [ 12, "JOY Switch T5" ], 
-          "publish": [ "gci/x52/t5", "BOOL", false, "input" ]
-        },
-        
-        { "log": false,
-          "id": [ 13, "JOY Switch T6" ], 
-          "publish": [ "gci/x52/t6", "BOOL", true, "invert" ]
-        },
-        
-        { "ignore": "timed",
-          "log": false,
-          "id": [ 19, "JOY Hat Pull Down" ],
-          "subtype": "timed", 
-          "send": "ELEV_TRIM_DN"
-        },
-        { "ignore": "timed",
-          "log": false,
-          "id": [ 21, "JOY Hat Pull Down" ], 
-          "subtype": [ "timed", 0, 100 ],
-          "send": "ELEV_TRIM_UP"
-        },
-        
-        { "ignore": "timed",
-          "log": false,
-          "id": [ 20, "JOY Hat Shift Right" ], 
-          "subtype": [ "timed", 0, 500, 4 ],
-          "send": "RUDDER_TRIM_RIGHT" 
-        },
-        { "ignore": "timed",
-          "log": false,
-          "id": [ 22, "JOY Hat Shift Left" ], 
-          "subtype": { "name": "timed", "parameters": [0, 500, 4] },  
-          "send": "RUDDER_TRIM_LEFT"
-        },
-        
-        { "ignore": true, "id": [  0, "JOY Half Trigger"     ] },
-        { "ignore": true, "id": [  1, "JOY SAFE Fire"        ] },
-        { "ignore": true, "id": [  2, "JOY Button A"         ] },
-        { "ignore": true, "id": [  3, "JOY Button B"         ] },
-        { "ignore": true, "id": [  4, "JOY Button C"         ] },
-        { "ignore": true, "id": [  5, "JOY Pinky"            ] },
-        { "ignore": true, "id": [  6, "TQ Button D"          ] },
-        { "ignore": true, "id": [  7, "TQ Button E"          ] },
-
-        { "ignore": true, "id": [ 14, "JOY Full Trigger"     ] },
-        { "ignore": true, "id": [ 15, "TQ Mouse Button"      ] },
-        { "ignore": true, "id": [ 16, "TQ Wheel Push Down"   ] },
-        { "ignore": true, "id": [ 17, "TQ Wheel Pull Up"     ] },
-        { "ignore": true, "id": [ 18, "Undefined"            ] },
-
-        { "ignore": true, "id": [ 23, "TQ Hat Pull Up"       ] },
-        { "ignore": true, "id": [ 24, "TQ Hat Shift Right"   ] },
-        { "ignore": true, "id": [ 25, "TQ Hat Push Down"     ] },
-        { "ignore": true, "id": [ 26, "TQ Hat Shift Left"    ] },
-        { "ignore": true, "id": [ 27, "JOY Switch Mode RED"  ] },
-        { "ignore": true, "id": [ 28, "JOY Switch Mode LILA" ] },
-        { "ignore": true, "id": [ 29, "JOY Switch Mode BLUE" ] },
-        { "ignore": true, "id": [ 30, "TQ Button i"          ] },
-        { "ignore": true, "id": [ 31, "TQ Pg Press"          ] }
+        }
       ]
     }
   ]
