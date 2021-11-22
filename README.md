@@ -15,13 +15,17 @@ There are 2 packages available:
 Air Manager or Air Player 4.1
 
 Simulators: MSFS2020, X-Plane 11, P3D or FSX
+
 Game Controllers: USB HID conformant controllers
+
 Platforms: Windows 10/11 and Linux
 
 ## Features Lite Version
 
 Generic integration code.
+
 Easy all-in-one configuration, separate from code.
+
 Code and configuration included in export/import as well as push able to Air Player.
 
 Support for basic control types 'axis' and 'button'
