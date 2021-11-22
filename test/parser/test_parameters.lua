@@ -16,10 +16,10 @@ local param = 100
 -- Test Case Specifications
 local testcases = {
   succeeds = {
-    test_table    = { parameters = { param } },
-    test_item     = { parameters = param },
+    test_table    = { parameters = { param } }
   },
   fails = {
+    test_item     = { parameters = param }
   }
 }
 
@@ -34,6 +34,10 @@ local function create_tests( cases )
     end
   end
   for name, case in pairs(cases.fails) do
+    tests[name] = function ()
+      local parameters = parse.parameters( case.parameters )
+      lu.assertNil( parameters )
+    end
   end
   return tests
 end

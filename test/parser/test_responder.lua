@@ -33,20 +33,19 @@ local parse = require "src/parser/parse"
 
 -- Model Data
 -- Test Case Data
---local sim    = "fs2020"
-local action = "send"
+local action = "write"
 local subtype = "axis"
 
 local dataref = "a/simple/dataref"
-local type    = "INT[8]"
+local unit    = "INT[8]"
 local offset  = 3
 local force   = true
-
+local initial = 0.0
 local output_spec = "input"
 
 local responder_spec = {
   var_id  = dataref,
-  unit_id = type,
+  unit_id = unit,
   offset  = offset,
   force   = force,
   value   = output_spec
@@ -54,25 +53,67 @@ local responder_spec = {
   
 -- Test Case Specifications
 local testcases = {
-  succeeds = {
-    test_obj = { on_trigger = responder_spec },
+  send = {
+--    test_send_full = responder_spec,
+    test_send_min = { var_id  = dataref }
   },
-  fails = {
+  write = {
+    test_write_min = { var_id  = dataref, unit_id = unit }
+  },
+  publish = {
+  -- not implemented
+  },
+  send_fail = {
+    test_empty = {}
+  },
+  write_fail = {
+    test_varonly = { var_id  = dataref },
+    test_unitonly = { unit_id = unit }
+  },
+  publish_fail = {
+    test_publish_min = { var_id  = dataref, unit_id = unit, initial = initial },
+    test_missingvar = { unit_id = unit, initial = initial },
+    test_missingunit = { var_id  = dataref, initial = initial },
+    test_missinginitial = { var_id  = dataref, unit_id = unit }
   }
 }
 
 -- Create Tests from Test Case Specifications
 local function create_tests( cases )
   local tests = {}
-  for name, case in pairs(cases.succeeds) do
+  for name, case in pairs(cases.send) do
     tests[name] = function ()
-      local responder = parse.responder( subtype, action, case.on_trigger )
+      local responder = parse.responder( subtype, "send", case )
       lu.assertNotNil( responder )
     end
   end
-  for name, case in pairs(cases.fails) do
+  for name, case in pairs(cases.write) do
     tests[name] = function ()
-      local responder = parse.responder( subtype, action, case.on_trigger )
+      local responder = parse.responder( subtype, "write", case )
+      lu.assertNotNil( responder )
+    end
+  end
+  for name, case in pairs(cases.publish) do
+    tests[name] = function ()
+      local responder = parse.responder( subtype, "publish", case )
+      lu.assertNotNil( responder )
+    end
+  end
+  for name, case in pairs(cases.send_fail) do
+    tests[name] = function ()
+      local responder = parse.responder( subtype, "send", case )
+      lu.assertNil( responder )
+    end
+  end
+  for name, case in pairs(cases.write_fail) do
+    tests[name] = function ()
+      local responder = parse.responder( subtype, "write", case )
+      lu.assertNil( responder )
+    end
+  end
+  for name, case in pairs(cases.publish_fail) do
+    tests[name] = function ()
+      local responder = parse.responder( subtype, "publish", case )
       lu.assertNil( responder )
     end
   end

@@ -19,16 +19,10 @@ local subtype = "button"
 -- Test Case Specifications
 local testcases = {
   full = {
---    test_obj = { 
---      send = { 
---        on_true =  { event = "EVENT" },
---        on_false = { event = "EVENT" }
---      }
---    },
-    test_array = { 
+    test_obj = { 
       send = { 
-        on_true  = { "EVENT" },
-        on_false = { "EVENT" }
+        on_true =  { event = "EVENT" },
+        on_false = { event = "EVENT" }
       }
     }
   },
@@ -38,6 +32,12 @@ local testcases = {
     test_obj_default    = { send = { event = "EVENT" } },
     test_array_default  = { send = { "EVENT" } },
     test_simple_default = { send = "EVENT" },
+    test_array = { 
+      send = { 
+        on_true  = { "EVENT" },
+        on_false = { "EVENT" }
+      }
+    },
     test_simple = { send = { 
         on_true  = "EVENT",
         on_false = "EVENT"

@@ -20,8 +20,9 @@ local testcases = {
     test_obj          = { subtype = { name = sub_name } },
     test_obj_pempty   = { subtype = { name = sub_name, parameters = {} } },
     test_obj_pnumber  = { subtype = { name = sub_name, parameters = 8 } },
-    test_obj_params   = { subtype = { name = sub_name, parameters = sub_params } },
-    
+    test_obj_params   = { subtype = { name = sub_name, parameters = sub_params } }
+  },
+  fails = {
     test_seq          = { subtype = { sub_name } },
     test_seq_pstring  = { subtype = { sub_name, "eight" } },
     test_seq_pbool    = { subtype = { sub_name, true } },
@@ -30,9 +31,8 @@ local testcases = {
     test_seq_pempty   = { subtype = { sub_name, {} } },
     test_seq_params   = { subtype = { sub_name, sub_params } },
     
-    test_name         = { subtype = sub_name }
-  },
-  fails = {
+    test_name         = { subtype = sub_name },
+    
     test_obj_nnumber  = { subtype = { name = 8 } },
     test_obj_nempty   = { subtype = { name = {} } },
 

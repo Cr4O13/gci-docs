@@ -125,8 +125,8 @@ local function create_tests( cases )
     tests[name] = function ()
       local output = parse.output( case.output )
       lu.assertNotNil( output )
-      lu.assertEquals( output.option, "nonlinear" )
-      lu.assertEquals( output.settings, settings )
+      lu.assertEquals( output.option, "default" )
+      lu.assertNil( output.settings )
       lu.assertNil( output.scale )
       lu.assertNil( output.value )
     end
@@ -134,9 +134,10 @@ local function create_tests( cases )
   for name, case in pairs(cases.none) do
     tests[name] = function ()
       local output = parse.output( case.output )
-      lu.assertNil( output.option )
+      lu.assertNotNil( output )
+      lu.assertEquals( output.option, "default" )
+      lu.assertNil( output.settings )
       lu.assertNil( output.scale )
-      lu.assertNil( output.setting )
       lu.assertNil( output.value )
     end
   end

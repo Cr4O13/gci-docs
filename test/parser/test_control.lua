@@ -13,7 +13,7 @@ local parse = require "src/parser/parse"
 
 -- Model Data
 -- Test Case Data
-local base_type = "axis"
+local base_type = "button"
 
 -- Test Case Specifications
 local testcases = {

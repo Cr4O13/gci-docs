@@ -19,20 +19,19 @@ local alias = "Lever 1"
 local testcases = {
   succeeds = {
     test_obj        = { id = { index = index, label = alias } },
-    test_obj_index  = { id = { index = index } },
+    test_obj_number = { id = { index = index, label = 8 } },
+    test_obj_index  = { id = { index = index } }
+  },
+  fails = {
     test_seq        = { id = { index, alias } },
     test_seq_index  = { id = { index } },
     test_index      = { id = index },
-    
-    test_obj_number = { id = { index = index, label = 8 } },
-    test_seq_number = { id = { index, 8 } }
-  },
-  fails = {
     test_null       = { id = nil },
     test_empty      = { id = {} },
     test_alias      = { id = alias },
     test_obj_alias  = { id = { label = alias } },
-    test_seq_alias  = { id = { alias } }
+    test_seq_alias  = { id = { alias } },
+    test_seq_number = { id = { index, 8 } }
   }
 }
 

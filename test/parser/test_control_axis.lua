@@ -64,7 +64,7 @@ local testcases = {
     test_obj_max = {
       log = log,
       id = { index = index, label = label },
-      subtype = "axis",
+      subtype = { name = "axis" },
       write = { 
         on_change = {
           variable = variable,
@@ -84,7 +84,9 @@ local testcases = {
           unit = unit
         }
       }
-    },
+    }
+  },
+  fail = {
     test_array = {  -- Enhancement #33
       log = log,
       id = index,
@@ -104,10 +106,7 @@ local testcases = {
       log = log,
       id = index,
       write = { variable, unit }
-    },
-  },
-  fail = {
-
+    }
   }
 }
 

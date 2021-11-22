@@ -45,7 +45,7 @@
     
 -- Test: OK
   parse.ignore = function (spec)
-    if spec or defaults.ignore then 
+    if spec then 
       return true 
     end
   end
@@ -102,7 +102,7 @@
       end
     end
 
-    local output = {}
+    local output = { option = "default" }
     if type(spec) == "table" then
       local invert   = parse.boolean(spec.invert)
       local scale    = parse.scale(spec.scale, invert)
@@ -132,23 +132,27 @@
   end
   
   parse.responder = function ( subtype, action, spec )
---    if type(spec) == "string" then -- simple notation
---      spec = { var_id = spec }
---    end
-    
     if type(spec) == "table" then
-      local output = parse.output( spec.output )      
-      return gci_responder:new {
-        var_id   = parse.var_id( spec ),
-        unit_id  = parse.unit_id( spec ),
-        offset   = parse.number( spec.offset ),
-        force    = parse.boolean( spec.force ),
-        initial  = spec.initial,
-        value    = output.value,
-        scale    = output.scale,
-        respond  = action_map[sim][action],
-        output   = output_map[subtype][output.option or "default"]
-      }
+      
+      local var_id  = parse.var_id( spec )
+      local unit_id = parse.unit_id( spec )
+      
+      if (action == "write" and var_id and unit_id) 
+      or (action == "send" and var_id) then 
+
+        local output = parse.output( spec.output )
+        
+        return gci_responder:new {
+          var_id   = var_id,
+          unit_id  = unit_id,
+          offset   = parse.number( spec.offset ),
+          force    = parse.boolean( spec.force ),
+          value    = output.value,
+          scale    = output.scale,
+          respond  = action_map[sim][action],
+          output   = output_map[subtype][output.option or "default"]
+        }
+      end
     end
   end
   
@@ -170,7 +174,7 @@
         local id = parse.id(spec.id)
         
         if id then
-          local subtype = parse.subtype(spec.subtype or base_type)
+          local subtype = parse.subtype( spec.subtype or { name = base_type } )
           
           if subtype then
             local action
