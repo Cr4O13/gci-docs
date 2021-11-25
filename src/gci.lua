@@ -13,7 +13,17 @@ function gci()
 end
 --}}
 -- Local Data
-  local gci_version = "4.1.0 Lite (BETA 23)"
+  local version = {
+    semantic = "1.0.0",
+    build    = "Lite",
+    pre      = "BETA",
+    sub_rel  = "3"
+  }
+  
+  local gci_version = version.semantic .. " " .. version.build 
+  if version.pre then 
+    gci_version = gci_version .. " (" .. version.pre .. " " .. version.sub_rel .. ")"
+  end
   
   local base_types = {
     axis = 0,
@@ -22,7 +32,7 @@ end
 
   local defaults = {
     
-    simulator = "fs2020",
+    simulator = "xpl",
     
     controller = {
       log = false
@@ -50,6 +60,7 @@ end
   
 --{{
   return {
+    version = version,
     gci_version = gci_version,
     base_types = base_types,
     defaults = defaults,
