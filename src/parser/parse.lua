@@ -133,25 +133,27 @@
   
   parse.responder = function ( subtype, action, spec )
     if type(spec) == "table" then
-      
-      local var_id  = parse.var_id( spec )
-      local unit_id = parse.unit_id( spec )
-      
-      if (action == "write" and var_id and unit_id) 
-      or (action == "send" and var_id) then 
-
-        local output = parse.output( spec.output )
+      if not spec.ignore then
+        local var_id  = parse.var_id( spec )
+        local unit_id = parse.unit_id( spec )
         
-        return gci_responder:new {
-          var_id   = var_id,
-          unit_id  = unit_id,
-          offset   = parse.number( spec.offset ),
-          force    = parse.boolean( spec.force ),
-          value    = output.value,
-          scale    = output.scale,
-          respond  = action_map[sim][action],
-          output   = output_map[subtype][output.option or "default"]
-        }
+        if (action == "write" and var_id and unit_id) 
+        or (action == "send" and var_id) then 
+
+          local output = parse.output( spec.output )
+          
+          return gci_responder:new {
+            log = parse.log( spec.log ),
+            var_id   = var_id,
+            unit_id  = unit_id,
+            offset   = parse.number( spec.offset ),
+            force    = parse.boolean( spec.force ),
+            value    = output.value,
+            scale    = output.scale,
+            respond  = action_map[sim][action],
+            output   = output_map[subtype][output.option or "default"]
+          }
+        end
       end
     end
   end
