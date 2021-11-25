@@ -8,7 +8,7 @@ GCI is a plugin that integrates game controllers into Air Manager.
 
 There are 2 packages available:
 - a LITE version, available as a download from this [GiHub Releases Page](https://github.com/Cr4O13/gci-docs/releases) (free)
-- a HOME version, available as a download through the Air Manager's built-in store (payware)
+- a HOME version, available as a download. The distribution channel will be defined soon.
 
 ## Requirements
 
