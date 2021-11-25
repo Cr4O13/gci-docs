@@ -13,7 +13,7 @@ function gci()
 end
 --}}
 -- Local Data
-  local gci_version = "4.1.0 Lite (BETA 22)"
+  local gci_version = "4.1.0 Lite (BETA 23)"
   
   local base_types = {
     axis = 0,
