@@ -17,7 +17,7 @@ end
     semantic = "1.0.0",
     build    = "Lite",
     pre      = "BETA",
-    sub_rel  = "3"
+    sub_rel  = "4"
   }
   
   local gci_version = version.semantic .. " " .. version.build 
