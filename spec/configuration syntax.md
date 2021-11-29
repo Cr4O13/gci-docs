@@ -76,6 +76,8 @@ include-file-spec :: { included-controls ( , included-controls) }
 included-controls :: axis-field | button-field
 ~~~
 
+The included controls are merged into the main control-list during parsing. A existing control with the same type and index is replaced by the included control.
+
 #### Control Identification
 
 ~~~

@@ -58,6 +58,7 @@ Additional notation styles in the (JSON) configuration file
 - Simplified notation on specific cases
 
 Splitted configuration files
+- maintain controls specifications in different configuration files 
 - include option in main configuration file `gcj.json`
 
 Planned features
