@@ -42,3 +42,4 @@ luac.out
 # Directories
 test/lib/
 build/
+docs/
