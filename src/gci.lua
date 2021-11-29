@@ -17,9 +17,11 @@ end
     semantic = "1.0.0",
     build    = "Lite",
     pre      = "BETA",
-    sub_rel  = "4"
+    sub_rel  = "5"
   }
   
+  local gci_candidate = {}
+
   local gci_version = version.semantic .. " " .. version.build 
   if version.pre then 
     gci_version = gci_version .. " (" .. version.pre .. " " .. version.sub_rel .. ")"
@@ -62,6 +64,7 @@ end
   return {
     version = version,
     gci_version = gci_version,
+    gci_candidate = gci_candidate,
     base_types = base_types,
     defaults = defaults,
     sim = sim

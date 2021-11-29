@@ -7,7 +7,8 @@
   local base_types      = gci.base_types
   local defaults        = gci.defaults
   local sim             = gci.sim
-  
+  local gci_candidate   = gci.gci_candidate
+
   local gci_controller  = controller.gci_controller
   
   local gci_control     = control.gci_control
@@ -224,7 +225,9 @@
   parse.controller = function ( spec )
     if not spec.ignore then
       local name = parse.string(spec.name)
-      if name then
+      if name and gci_candidate[name] then
+        
+        local logging = parse.log(spec.log) or defaults.controller.log
         
         local controls = {}
         for base_type, type_value in pairs(base_types) do
@@ -232,7 +235,7 @@
         end
         return gci_controller:new{ 
           name = name,
-          log = parse.log(spec.log) or defaults.controller.log,
+          log = logging,
           controls = controls
         }
       end
