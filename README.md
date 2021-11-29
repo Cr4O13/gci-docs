@@ -57,7 +57,12 @@ Additional notation styles in the (JSON) configuration file
 - Array style notation (instead of object style)
 - Simplified notation on specific cases
 
+Splitted configuration files
+- maintain controls specifications in different configuration files 
+- include option in main configuration file `gcj.json`
+
 Planned features
+- Response presets specified in a `responses.json` file
 - Support for custom control types
 
 ## Dependencies

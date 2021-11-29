@@ -44,22 +44,39 @@ controller-name-field :: "name" : controller-name
 controller-name :: lua-string
 ~~~
 
-The controller's name must be identical to the name Air Manager returns in the API function `game_controller_list`. This name should be identical to the name displayed by the Windows 'Game Controller' control panel (joy.cpl).
+The `controller-name` must be identical to the name Air Manager returns in the API function `game_controller_list`. This name usually is identical to the name displayed by the Windows 'Game Controller' control panel (joy.cpl). Ther is also a list of names for the recognized controllers in the Air Manager log file after startup of GCI.
 
 ### Controls
 
 ~~~
 controls :: controls-field ( , controls )
-controls-field :: axis-field | button-field
+controls-field :: axis-field | button-field | include-option
 
 axis-field :: "axis" : [ control-list ]
 button-field :: "button" : [ control-list ]
+
+include-option :: "include" : [ include-list ]
+include-list :: file-name ( , include-list )
+file-name :: lua-string
 
 control-list :: control-spec ( , control-list )
 control-spec :: { id-field , action-field ( , subtype-field ) ( , attributes ) }
 ~~~
 
 There are two basic types of control: `axis` and `button`. A control specification must be placed in the corresponding section in the configuration file.
+
+The `file-name` must be the name of a `.json` file in the `resources` folder. Example: `"x52-engine-controls.json"`.
+
+#### Include File
+
+The include file must contain a limited specification.
+
+~~~
+include-file-spec :: { included-controls ( , included-controls) }
+included-controls :: axis-field | button-field
+~~~
+
+The included controls are merged into the main control-list during parsing. A existing control with the same type and index is replaced by the included control.
 
 #### Control Identification
 
@@ -219,8 +236,9 @@ invert-value :: lua boolean
 scale-field :: "scale" : scale-value
 scale-value :: lua-number
 
-response-field :: "response" : response-settings 
+response-field :: "response" : response-settings | response-reference
 response-settings :: [ fix-point, fix-point-list ]
+response-reference :: lua-string
 
 fix-point-list :: fix-point ( , fix-point-list )
 fix-point :: [ input-value, output-value ]
@@ -229,6 +247,17 @@ input-value :: input-range-number
 input-range-number :: -1.0 =< lua-number =< +1.0
 
 output-value :: lua-number
+~~~
+
+The `response-reference` must be the name of a `response-preset` from the `responses.json` specification file.
+
+##### Response Preset Specification File
+
+~~~
+responses-spec :: { preset-list }
+preset-list :: response-preset ( , preset-list )
+response-preset :: preset-name :  response-settings
+preset-name :: lua-string
 ~~~
 
 #### Button Output
