@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://cr4o13.github.io/gci-docs/sitemap.xml

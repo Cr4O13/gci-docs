@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>gci-docs</title>
+    <link href="https://cr4o13.github.io/gci-docs/feed.xml" rel="self" />
+    <link href="https://cr4o13.github.io/gci-docs" />
+    <updated>1970-01-01T01:00:00+01:00</updated>
+    <author>
+        <name>Cr4O13</name>
+    </author>
+    <id>https://cr4o13.github.io/gci-docs</id>
+
+</feed>
