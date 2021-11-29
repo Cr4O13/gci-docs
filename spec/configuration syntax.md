@@ -251,6 +251,8 @@ output-value :: lua-number
 
 The `response-reference` must be the name of a `response-preset` from the `responses.json` specification file.
 
+##### Response Preset Specification File
+
 ~~~
 responses-spec :: { preset-list }
 preset-list :: response-preset ( , preset-list )
